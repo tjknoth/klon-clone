@@ -46,6 +46,7 @@ pcb-module bypass :
   net (in, c2.p[1])
   net (c2.p[2], r3.p[1])
   net (r3.p[2], gnd)
+  ;symbol(gndnet) = ocdb/utils/symbols/ground-sym
   net (r3.p[1], r4.p[1])
   net (r4.p[2], out)
 
@@ -75,14 +76,41 @@ pcb-module tone :
   pin power-16v2
   pin power-n8v6
 
-
 pcb-module power :
-  pin in
   pin gnd
   pin power-9v
   pin power-4v5
   pin power-n8v6
   pin power-16v2
+
+  inst c17 : ceramic-cap(47.0e-6)
+  ; Zener diode
+  inst d4 : database-part(["mpn" => "1N4742A", "manufacturer" => "Tak Cheong"])
+  ; DC power jack
+  inst j3 : database-part(["mpn" => "DC-060A", "manufacturer" => "HRO Electronics"])
+  ; Connect power, diode, capacitor c17
+  net (gnd, j3.CON1)
+  net (j3.CON2, d4.K)
+  net (d4.A, gnd)
+  net (c17.p[1], gnd)
+  net (c17.p[2], j3.CON2)
+  net (power-9v, j3.CON2)
+
+  ; Voltage converter 
+  inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
+  ; TODO: big converter circuit
+
+  ; 4v5 sub-circuit
+  inst r29 : chip-resistor(27.0e3)
+  inst r30 : chip-resistor(27.0e3) 
+  inst c18 : ceramic-cap(47.0e-6)
+  net (power-9v, r29.p[1])
+  net (r29.p[2], r30.p[1])
+  net (r30.p[2], gnd)
+  net (r29.p[2], power-4v5)
+  net (r29.p[2], c18.p[1])
+  net (c18.p[2], gnd)
+
 
 pcb-module output :
   pin gain-in
@@ -111,6 +139,10 @@ pcb-module centaur :
   net (sum-amp.out, tone.in)
   net (tone.out, output.gain-in)
   net (bypass.out, output.bypass-in)
+
+  ; net gnds 
+  net GND (input.gnd bypass.gnd gain.gnd tone.gnd power.gnd output.gnd)  
+  symbol(GND) = ocdb/utils/symbols/ground-sym
 
   ; Net power module
   net (power.power-9v, input.power-9v)
