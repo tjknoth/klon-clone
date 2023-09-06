@@ -7,6 +7,16 @@ defpackage main :
   import ocdb/utils/generic-components
   import helpers
 
+; carl notes:
+; can try: film capacitor, ptfe capacitor
+; c15: x7r (and other big ones)
+; small caps: c0g
+; op amp: 
+; gain bandwidth
+
+;TODOs:
+;-two op amps in main module, connect them to input/gain and sum/tone respectively
+
 ; Define the shape/size of the board
 val board-shape = RoundedRectangle(30.0, 18.5, 0.25)
 
@@ -22,16 +32,26 @@ pcb-module input :
   pin power-4v5
   pin power-9v
   pin out
+  pin opamp-neg
+  pin opamp-pos
+  pin opamp-out
 
+  ; TODO: jack
+
+  ; Components: two resistors and a cap
   inst r1 : chip-resistor(10.0e3)
   inst r2 : chip-resistor(1.0e6)
-
   inst c1 : ceramic-cap(0.1e-6)
 
   net (in, r1.p[1])
   net (r1.p[2], c1.p[1])
   net (c1.p[2], r2.p[1])
   net (r2.p[2], power-4v5)
+  net (r2.p[1], opamp-pos)
+  net (opamp-out, out)
+  net (out, opamp-neg)
+
+  schematic-group(self) = input
 
 ; Bypass mode
 pcb-module bypass :
@@ -46,7 +66,6 @@ pcb-module bypass :
   net (in, c2.p[1])
   net (c2.p[2], r3.p[1])
   net (r3.p[2], gnd)
-  ;symbol(gndnet) = ocdb/utils/symbols/ground-sym
   net (r3.p[1], r4.p[1])
   net (r4.p[2], out)
 
@@ -57,6 +76,14 @@ pcb-module gain :
   pin gnd
   pin power-4v5
   pin power-9v 
+  pin opamp-neg
+  pin opamp-pos
+  pin opamp-out
+
+  ; TODO: this is 10k! need the right one
+  inst rv2 : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
+
+  ; TODO: everything
 
 ; summing opamp
 pcb-module sum-amp :
@@ -66,6 +93,24 @@ pcb-module sum-amp :
   pin power-n8v6
   pin power-16v2
   pin power-4v5
+  pin opamp-neg
+  pin opamp-pos
+  pin opamp-out
+
+  ; components: 1 resistor, 1 cap
+  inst r20 : chip-resistor(392.0e3)
+  inst c13 : ceramic-cap(820.0e-12)
+
+  ; nets: all in parallel
+  net (in, opamp-neg)
+  net (power-4v5, opamp-pos)
+  net (in, r20.p[1])
+  net (in, c13.p[1])
+  net (r20.p[2], out)
+  net (c13.p[2], out)
+  net (opamp-out, out)
+
+  schematic-group(self) = sum-amp
 
 ; tone control
 pcb-module tone :
@@ -75,7 +120,36 @@ pcb-module tone :
   pin power-4v5
   pin power-16v2
   pin power-n8v6
+  pin opamp-neg
+  pin opamp-pos
+  pin opamp-out
 
+  ; Components
+  inst r21 : chip-resistor(1.8e3)
+  inst r22 : chip-resistor(100.0e3)
+  inst r23 : chip-resistor(4.7e3)
+  inst r24 : chip-resistor(100.0e3)
+  inst c14 : ceramic-cap(3.9e-9)
+  ; 10k linear taper pot
+  inst rv2 : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
+
+  ; nets
+  net (in, r21.p[1])
+  net (in, r22.p[1])
+  net (r21.p[2], rv2.p[1])
+  net (rv2.p[3], r23.p[1])
+  net (r23.p[2], out)
+  net (rv2.p[2], c14.p[1])
+  net (c14.p[2], r22.p[2])
+  net (r22.p[2], opamp-neg)
+  net (power-4v5, opamp-pos)
+  net (opamp-out, out)
+  net (c14.p[2], r24.p[1])
+  net (r24.p[2], out)
+
+  schematic-group(self) = tone
+
+; power supply
 pcb-module power :
   pin gnd
   pin power-9v
@@ -117,6 +191,11 @@ pcb-module output :
   pin bypass-in
   pin gnd
 
+  ; audio taper 10k pot
+  inst rv3 : database-part(["mpn" => "RK1631110TT3", "manufacturer" => "ALPSALPINE"])
+
+  ; TODO: everything
+
 
 ; Module to run as a design
 pcb-module centaur :
@@ -132,6 +211,30 @@ pcb-module centaur :
   inst power : power
   inst output : output
 
+  ; instantate op-amps
+  inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
+  inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
+
+  ; net 9v op-amp
+  net (u1.VCC+, power.power-9v)
+  net (u1.VCC-, gnd)
+  net (u1.IN1+, input.opamp-pos)
+  net (u1.IN1-, input.opamp-neg)
+  net (u1.OUT1, input.opamp-out)
+  net (u1.IN2+, gain.opamp-pos)
+  net (u1.IN2-, gain.opamp-neg)
+  net (u1.OUT2, gain.opamp-out)
+
+  ; net 16v op-amp
+  net (u2.VCC+, power.power-16v2)
+  net (u2.VCC-, power.power-n8v6)
+  net (u2.IN1+, sum-amp.opamp-pos)
+  net (u2.IN1-, sum-amp.opamp-neg)
+  net (u2.OUT1, sum-amp.opamp-out)
+  net (u2.IN2+, tone.opamp-pos)
+  net (u2.IN2-, tone.opamp-neg)
+  net (u2.OUT2, tone.opamp-out)
+
   ; Net sub-modules
   net (input.out, gain.in)
   net (input.out, bypass.in)
@@ -144,7 +247,7 @@ pcb-module centaur :
   net GND (input.gnd bypass.gnd gain.gnd tone.gnd power.gnd output.gnd)  
   symbol(GND) = ocdb/utils/symbols/ground-sym
 
-  ; Net power module
+  ; Net power module to all sub-modules
   net (power.power-9v, input.power-9v)
   net (power.power-9v, gain.power-9v)
   net (power.power-4v5, input.power-4v5)
@@ -158,8 +261,8 @@ pcb-module centaur :
 
 
   ; Write the board version on silkscreen
-  inst version-label  : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
-  place(version-label) at loc(0.0, height(board-shape) / 2.0 - 1.0) on Bottom
+  ;inst version-label  : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
+  ;place(version-label) at loc(0.0, height(board-shape) / 2.0 - 1.0) on Bottom
 
 ; Set the design name - a directory with this name will be generated under the "designs" directory
 set-current-design("jitx-design")
