@@ -157,11 +157,28 @@ pcb-module power :
   pin power-n8v6
   pin power-16v2
 
+  ; capacitors
   inst c17 : ceramic-cap(47.0e-6)
+  inst c18 : ceramic-cap(47.0e-6)
+  inst c19 : ceramic-cap(1.0e-6)
+  inst c20 : ceramic-cap(1.0e-6)
+  inst c21 : ceramic-cap(1.0e-6)
+  inst c22 : ceramic-cap(1.0e-6)
+  ; resistors
+  inst r29 : chip-resistor(27.0e3)
+  inst r30 : chip-resistor(27.0e3)
   ; Zener diode
+  ; A is base of triangle
+  ; C/K is tip
   inst d4 : database-part(["mpn" => "1N4742A", "manufacturer" => "Tak Cheong"])
+  ; Normal diodes
+  inst d7 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
+  inst d8 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
   ; DC power jack
   inst j3 : database-part(["mpn" => "DC-060A", "manufacturer" => "HRO Electronics"])
+  ; Voltage converter 
+  inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
+
   ; Connect power, diode, capacitor c17
   net (gnd, j3.CON1)
   net (j3.CON2, d4.K)
@@ -170,20 +187,30 @@ pcb-module power :
   net (c17.p[2], j3.CON2)
   net (power-9v, j3.CON2)
 
-  ; Voltage converter 
-  inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
-  ; TODO: big converter circuit
-
   ; 4v5 sub-circuit
-  inst r29 : chip-resistor(27.0e3)
-  inst r30 : chip-resistor(27.0e3) 
-  inst c18 : ceramic-cap(47.0e-6)
   net (power-9v, r29.p[1])
   net (r29.p[2], r30.p[1])
   net (r30.p[2], gnd)
   net (r29.p[2], power-4v5)
   net (r29.p[2], c18.p[1])
   net (c18.p[2], gnd)
+
+  ; Converter sub-circuit
+  net (u3.N_C_BOOST, power-9v)
+  net (u3.N_C_BOOST, d7.A)
+  net (d7.K, c20.p[2])
+  net (c20.p[2], d8.A)
+  net (d8.K, power-16v2)
+  net (d8.K, c21.p[1])
+  net (c21.p[2], gnd)
+  net (u3.CAP+, c20.p[1])
+  net (u3.GND, gnd) 
+  net (u3.CAP-, c22.p[1])
+  net (c22.p[2], c20.p[1])
+  net (u3.V+, power-9v)
+  net (u3.VOUT, power-n8v6)
+  net (u3.VOUT, c19.p[1])
+  net (c19.p[2], gnd)
 
 
 pcb-module output :
