@@ -212,6 +212,8 @@ pcb-module power :
   net (u3.VOUT, c19.p[1])
   net (c19.p[2], gnd)
 
+  ;schematic-group(self) = power
+
 
 pcb-module output :
   pin gain-in
