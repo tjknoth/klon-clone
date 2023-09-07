@@ -28,7 +28,6 @@ defn setup-board () :
 ; Input stage 
 pcb-module input :
   pin gnd
-  pin in
   pin power-4v5
   pin power-9v
   pin out
@@ -36,14 +35,16 @@ pcb-module input :
   pin opamp-pos
   pin opamp-out
 
-  ; TODO: jack
 
-  ; Components: two resistors and a cap
+  ; Components: input jack header, two resistors and a cap
+  inst jack : pin-header(3)
   inst r1 : chip-resistor(10.0e3)
   inst r2 : chip-resistor(1.0e6)
   inst c1 : ceramic-cap(0.1e-6)
 
-  net (in, r1.p[1])
+  net (jack.p[3], r1.p[1])
+  ; jack.p[2] not used
+  net (jack.p[1], gnd)
   net (r1.p[2], c1.p[1])
   net (c1.p[2], r2.p[1])
   net (r2.p[2], power-4v5)
@@ -51,7 +52,7 @@ pcb-module input :
   net (opamp-out, out)
   net (out, opamp-neg)
 
-  schematic-group(self) = input
+  ;schematic-group(self) = input
 
 ; Bypass mode
 pcb-module bypass :
@@ -110,7 +111,7 @@ pcb-module sum-amp :
   net (c13.p[2], out)
   net (opamp-out, out)
 
-  schematic-group(self) = sum-amp
+  ;schematic-group(self) = sum-amp
 
 ; tone control
 pcb-module tone :
@@ -147,7 +148,7 @@ pcb-module tone :
   net (c14.p[2], r24.p[1])
   net (r24.p[2], out)
 
-  schematic-group(self) = tone
+  ;schematic-group(self) = tone
 
 ; power supply
 pcb-module power :
@@ -220,10 +221,35 @@ pcb-module output :
   pin bypass-in
   pin gnd
 
+  ; panel mount jack and SPDT switch
+  ; jack: p1 = tip, p2 = connector, p3 = shoulder
+  ; switch: p1,2 = throws 
+  inst jack : pin-header(3)
+  inst sw1 : pin-header(3)
   ; audio taper 10k pot
   inst rv3 : database-part(["mpn" => "RK1631110TT3", "manufacturer" => "ALPSALPINE"])
+  ; capacitors and resistors
+  inst c15 : ceramic-cap(4.7e-6)
+  inst r25 : chip-resistor(560.0)
+  inst r243 : chip-resistor(68.0e3)
+  inst r242 : chip-resistor(68.0e3)
+  inst r28 : chip-resistor(100.0e3)
 
-  ; TODO: everything
+  ; nets
+  net (gain-in, c15.p[1])
+  net (c15.p[2], r25.p[1])
+  net (r25.p[2], rv3.p[1])
+  net (rv3.p[2], sw1.p[2])
+  net (rv3.p[3], gnd)
+  net (bypass-in, r243.p[1])
+  net (bypass-in, sw1.p[1])
+  net (r243.p[2], sw1.p[3])
+  net (r242.p[2], sw1.p[3])
+  net (sw1.p[3], jack.p[1])
+  net (r28.p[1], jack.p[2])
+  net (r28.p[1], jack.p[3])
+  net (r28.p[2], gnd)
+
 
 
 ; Module to run as a design
