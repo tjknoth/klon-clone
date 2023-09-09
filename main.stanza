@@ -5,6 +5,8 @@ defpackage main :
   import jitx
   import jitx/commands
   import ocdb/utils/generic-components
+  import ocdb/utils/symbols
+  import ocdb/utils/landpatterns
   import helpers
 
 ; carl notes:
@@ -14,10 +16,8 @@ defpackage main :
 ; op amp: 
 ; gain bandwidth
 
-;TODOs:
-;-two op amps in main module, connect them to input/gain and sum/tone respectively
-
 ; Define the shape/size of the board
+; TODO: pick enclosure size, adjust
 val board-shape = RoundedRectangle(30.0, 18.5, 0.25)
 
 ; Setup the board
@@ -44,13 +44,15 @@ pcb-module input :
 
   net (jack.p[3], r1.p[1])
   ; jack.p[2] not used
-  net (jack.p[1], gnd)
+  net GND (jack.p[1], gnd)
   net (r1.p[2], c1.p[1])
   net (c1.p[2], r2.p[1])
   net (r2.p[2], power-4v5)
   net (r2.p[1], opamp-pos)
   net (opamp-out, out)
   net (out, opamp-neg)
+
+  symbol(GND) = ground-sym
 
   ;schematic-group(self) = input
 
@@ -66,9 +68,28 @@ pcb-module bypass :
 
   net (in, c2.p[1])
   net (c2.p[2], r3.p[1])
-  net (r3.p[2], gnd)
+  net GND (r3.p[2], gnd)
   net (r3.p[1], r4.p[1])
   net (r4.p[2], out)
+
+  symbol(GND) = ground-sym
+
+; placeholder component for diode 1N34A 
+; TODO: find real part
+pcb-component germanium-diode :
+  pin A
+  pin K
+  val sym = diode-sym(DiodeStd)
+  symbol = sym(
+    A => sym.a,
+    K => sym.c
+  )
+  ; Is this an OK landpattern?
+  val lp = ipc-two-pin-landpattern("0402")
+  landpattern = lp(
+    A => lp.p[1]
+    K => lp.p[2]
+  )
 
 ; opamp gain
 pcb-module gain :
@@ -81,16 +102,99 @@ pcb-module gain :
   pin opamp-pos
   pin opamp-out
 
-  ; TODO: this is 10k! need the right one
-  inst rv2 : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
+  ; TODO: these are 10k! need the right one
+  ; TODO: what's the deal with gain-a? connected to constant power supply
+  inst rv-gain-a : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
+  inst rv-gain-b : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
 
-  ; TODO: everything
+  inst r5 : chip-resistor(5.1e3)
+  inst r6 : chip-resistor(10.0e3)
+  inst r7 : chip-resistor(1.5e3)
+  inst r8 : chip-resistor(1.5e3)
+  inst r9 : chip-resistor(1.0e3)
+  inst r10 : chip-resistor(2.0e3)
+  inst r11 : chip-resistor(15.0e3)
+  inst r12 : chip-resistor(422.0e3)
+  inst r13 : chip-resistor(1.0e3)
+  ; where is r14?
+  inst r15 : chip-resistor(22.0e3)
+  inst r16 : chip-resistor(47.0e3)
+  inst r17 : chip-resistor(27.0e3)
+  inst r18 : chip-resistor(12.0e3)
+  inst r19 : chip-resistor(15.0e3)
+
+  inst c3 : ceramic-cap(0.1e-6)
+  inst c4 : ceramic-cap(68.0e-9)
+  inst c5 : ceramic-cap(68.0e-9)
+  inst c6 : ceramic-cap(390.0e-9)
+  inst c7 : ceramic-cap(82.0e-9)
+  inst c8 : ceramic-cap(390.0e-12)
+  inst c9 : ceramic-cap(1.0e-6)
+  inst c10 : ceramic-cap(1.0e-6)
+  inst c11 : ceramic-cap(2.2e-9)
+  inst c12 : ceramic-cap(27.0e-9)
+  inst c16 : ceramic-cap(1.0e-6)
+
+  inst d2 : germanium-diode
+  inst d3 : germanium-diode
+
+  ; so many nets
+  net (in, r5.p[1])
+  net (in, c4.p[1])
+  net (r5.p[2], c4.p[2])
+  net (r5.p[2], r8.p[1])
+  net (r8.p[1], c6.p[1])
+  net (c6.p[1], rv-gain-b.p[1])
+  net (c6.p[2], r9.p[1])
+  net (r9.p[2], power-4v5)
+  net (rv-gain-b.p[3], power-4v5)
+  net (r8.p[2], power-4v5)
+  net (in, c3.p[1])
+  net (c3.p[2], r7.p[1])
+  net (r7.p[2], c16.p[1])
+  net (c16.p[2], gnd)
+  net (c16.p[2], r19.p[1])
+  net (r19.p[2], out)
+  net (c3.p[2], r6.p[1])
+  net (c3.p[2], c5.p[1])
+  net (c5.p[2], r6.p[2])
+  net (r6.p[2], rv-gain-a.p[1])
+  net (r6.p[2], opamp-pos)
+  net (rv-gain-a.p[2], power-4v5)
+  net (rv-gain-a.p[3], r10.p[1])
+  net (r10.p[2], r11.p[1])
+  net (r10.p[2], c7.p[1])
+  net (c7.p[2], r11.p[2])
+  net (r11.p[2], opamp-neg)
+  net (r11.p[2], r12.p[1])
+  net (r11.p[2], c8.p[1])
+  net (c8.p[2], r12.p[2])
+  net (r12.p[2], opamp-out)
+  net (opamp-out, c9.p[1])
+  net (c9.p[2], r13.p[1])
+  net (r13.p[2], d2.K)
+  net (d2.A, d3.K)
+  net (d2.A, gnd)
+  net (d2.K, d3.A)
+  net (d3.A, c10.p[1])
+  net (c10.p[2], r16.p[1])
+  net (r16.p[2], out)
+  net (c10.p[2], c11.p[1])
+  net (c11.p[2], r15.p[2])
+  net (r15.p[2], rv-gain-b.p[2])
+  net (r15.p[2], r17.p[2])
+  net (r15.p[2], r18.p[2])
+  net (r18.p[1], c12.p[2])
+  net (c12.p[1], out)
+
+
+
+
 
 ; summing opamp
 pcb-module sum-amp :
   pin in
   pin out
-  pin gnd
   pin power-n8v6
   pin power-16v2
   pin power-4v5
@@ -117,7 +221,6 @@ pcb-module sum-amp :
 pcb-module tone :
   pin in
   pin out
-  pin gnd
   pin power-4v5
   pin power-16v2
   pin power-n8v6
@@ -147,8 +250,6 @@ pcb-module tone :
   net (opamp-out, out)
   net (c14.p[2], r24.p[1])
   net (r24.p[2], out)
-
-  ;schematic-group(self) = tone
 
 ; power supply
 pcb-module power :
@@ -181,20 +282,16 @@ pcb-module power :
   inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
 
   ; Connect power, diode, capacitor c17
-  net (gnd, j3.CON1)
   net (j3.CON2, d4.K)
-  net (d4.A, gnd)
-  net (c17.p[1], gnd)
   net (c17.p[2], j3.CON2)
   net (power-9v, j3.CON2)
 
   ; 4v5 sub-circuit
   net (power-9v, r29.p[1])
   net (r29.p[2], r30.p[1])
-  net (r30.p[2], gnd)
   net (r29.p[2], power-4v5)
   net (r29.p[2], c18.p[1])
-  net (c18.p[2], gnd)
+
 
   ; Converter sub-circuit
   net (u3.N_C_BOOST, power-9v)
@@ -203,17 +300,15 @@ pcb-module power :
   net (c20.p[2], d8.A)
   net (d8.K, power-16v2)
   net (d8.K, c21.p[1])
-  net (c21.p[2], gnd)
   net (u3.CAP+, c20.p[1])
-  net (u3.GND, gnd) 
   net (u3.CAP-, c22.p[1])
   net (c22.p[2], c20.p[1])
   net (u3.V+, power-9v)
   net (u3.VOUT, power-n8v6)
   net (u3.VOUT, c19.p[1])
-  net (c19.p[2], gnd)
 
-  ;schematic-group(self) = power
+  net GND (gnd, j3.CON1, d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
+  symbol(GND) = ground-sym
 
 
 pcb-module output :
@@ -240,7 +335,6 @@ pcb-module output :
   net (c15.p[2], r25.p[1])
   net (r25.p[2], rv3.p[1])
   net (rv3.p[2], sw1.p[2])
-  net (rv3.p[3], gnd)
   net (bypass-in, r243.p[1])
   net (bypass-in, sw1.p[1])
   net (r243.p[2], sw1.p[3])
@@ -248,8 +342,9 @@ pcb-module output :
   net (sw1.p[3], jack.p[1])
   net (r28.p[1], jack.p[2])
   net (r28.p[1], jack.p[3])
-  net (r28.p[2], gnd)
 
+  net GND (gnd, rv3.p[3], r28.p[2])
+  symbol(GND) = ground-sym
 
 
 ; Module to run as a design
@@ -272,7 +367,7 @@ pcb-module centaur :
 
   ; net 9v op-amp
   net (u1.VCC+, power.power-9v)
-  net (u1.VCC-, gnd)
+  ;net (u1.VCC-, gnd)
   net (u1.IN1+, input.opamp-pos)
   net (u1.IN1-, input.opamp-neg)
   net (u1.OUT1, input.opamp-out)
@@ -291,16 +386,15 @@ pcb-module centaur :
   net (u2.OUT2, tone.opamp-out)
 
   ; Net sub-modules
-  net (input.out, gain.in)
-  net (input.out, bypass.in)
+  net (input.out, gain.in, bypass.in)
   net (gain.out, sum-amp.in)
   net (sum-amp.out, tone.in)
   net (tone.out, output.gain-in)
   net (bypass.out, output.bypass-in)
 
   ; net gnds 
-  net GND (input.gnd bypass.gnd gain.gnd tone.gnd power.gnd output.gnd)  
-  symbol(GND) = ocdb/utils/symbols/ground-sym
+  net GND (input.gnd bypass.gnd gain.gnd power.gnd output.gnd, u1.VCC-) 
+  symbol(GND) = ground-sym
 
   ; Net power module to all sub-modules
   net (power.power-9v, input.power-9v)
