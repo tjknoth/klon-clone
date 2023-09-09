@@ -152,7 +152,6 @@ pcb-module gain :
   net (in, c3.p[1])
   net (c3.p[2], r7.p[1])
   net (r7.p[2], c16.p[1])
-  net (c16.p[2], gnd)
   net (c16.p[2], r19.p[1])
   net (r19.p[2], out)
   net (c3.p[2], r6.p[1])
@@ -174,7 +173,6 @@ pcb-module gain :
   net (c9.p[2], r13.p[1])
   net (r13.p[2], d2.K)
   net (d2.A, d3.K)
-  net (d2.A, gnd)
   net (d2.K, d3.A)
   net (d3.A, c10.p[1])
   net (c10.p[2], r16.p[1])
@@ -186,6 +184,9 @@ pcb-module gain :
   net (r15.p[2], r18.p[2])
   net (r18.p[1], c12.p[2])
   net (c12.p[1], out)
+
+  net GND (gnd, c16.p[2], d2.A)
+  symbol(GND) = ground-sym
 
 
 
