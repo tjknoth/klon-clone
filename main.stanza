@@ -180,7 +180,7 @@ pcb-module gain :
   net (c10.p[2], r16.p[1])
   net (r16.p[2], out)
   net (c10.p[2], c11.p[1])
-  net (c11.p[2], r15.p[2])
+  net (c11.p[2], r15.p[1])
   net (r15.p[2], rv-gain-b.p[2])
   net (r15.p[2], r17.p[2])
   net (r17.p[1], c12.p[1])
@@ -327,7 +327,9 @@ pcb-module output :
   ; jack: p1 = tip, p2 = connector, p3 = shoulder
   ; switch: p1,2 = throws 
   inst jack : pin-header(3)
+  reference-designator(jack) = "output jack"
   inst sw1 : pin-header(3)
+  reference-designator(sw1) = "switch"
   ; audio taper 10k pot
   inst rv3 : database-part(["mpn" => "RK1631110TT3", "manufacturer" => "ALPSALPINE"])
   ; capacitors and resistors
@@ -346,6 +348,7 @@ pcb-module output :
   net (bypass-in, sw1.p[1])
   net (r243.p[2], sw1.p[3])
   net (r242.p[2], sw1.p[3])
+  net (r242.p[1], rv3.p[2])
   net (sw1.p[3], jack.p[1])
   net (r28.p[1], jack.p[2])
   net (r28.p[1], jack.p[3])
@@ -354,27 +357,6 @@ pcb-module output :
 
   symbol(GND) = ground-sym
   schematic-group(self) = output
-
-;pcb-component double-op-amp :
-;  pin VCC+ 
-;  pin VCC-
-;  pin IN1+
-;  pin IN1-
-;  pin OUT1
-;  pin IN2+
-;  pin IN2-
-;  pin OUT2
-;
-;  unit(1) = multi-op-amp-sym(
-;    IN1+ => multi-op-amp-sym.vi+
-;    IN1- => multi-op-amp-sym.vi-
-;    OUT1+ => multi-op-amp-sym.vo+
-;  )
-;  unit(2) = multi-op-amp-sym(
-;    IN1+ => multi-op-amp-sym.vi+
-;    IN1- => multi-op-amp-sym.vi-
-;    OUT1+ => multi-op-amp-sym.vo+
-;  )
 
 ; Module to run as a design
 pcb-module centaur :
@@ -393,7 +375,9 @@ pcb-module centaur :
   ; instantate op-amps
   ;inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
   inst u1 : components/STMicroelectronics/TL072IDT/component
+  reference-designator(u1) = "U1"
   inst u2 : components/STMicroelectronics/TL072IDT/component
+  reference-designator(u2) = "U2"
   ;inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
 
   ; net 9v op-amp
