@@ -355,6 +355,26 @@ pcb-module output :
   symbol(GND) = ground-sym
   schematic-group(self) = output
 
+;pcb-component double-op-amp :
+;  pin VCC+ 
+;  pin VCC-
+;  pin IN1+
+;  pin IN1-
+;  pin OUT1
+;  pin IN2+
+;  pin IN2-
+;  pin OUT2
+;
+;  unit(1) = multi-op-amp-sym(
+;    IN1+ => multi-op-amp-sym.vi+
+;    IN1- => multi-op-amp-sym.vi-
+;    OUT1+ => multi-op-amp-sym.vo+
+;  )
+;  unit(2) = multi-op-amp-sym(
+;    IN1+ => multi-op-amp-sym.vi+
+;    IN1- => multi-op-amp-sym.vi-
+;    OUT1+ => multi-op-amp-sym.vo+
+;  )
 
 ; Module to run as a design
 pcb-module centaur :
@@ -371,8 +391,10 @@ pcb-module centaur :
   inst output : output
 
   ; instantate op-amps
-  inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
-  inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
+  ;inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
+  inst u1 : components/STMicroelectronics/TL072IDT/component
+  inst u2 : components/STMicroelectronics/TL072IDT/component
+  ;inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
 
   ; net 9v op-amp
   net (u1.VCC+, power.power-9v)

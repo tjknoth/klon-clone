@@ -1,0 +1,142 @@
+; This file is generated based on the parts database query below:")
+;   database-part(["manufacturer" => "STMicroelectronics", "mpn" => "TL072IDT"])
+#use-added-syntax(jitx)
+defpackage components/STMicroelectronics/TL072IDT :
+  import core
+  import jitx
+  import jitx/commands
+  import ocdb/utils/symbols
+
+
+pcb-pad capsule-smd-pad :
+  name = "capsule-smd-pad"
+  type = SMD
+  shape = Capsule(0.588, 2.045, loc(0.0, 0.0))
+  layer(SolderMask(Top)) = Capsule(0.69, 2.147, loc(0.0, 0.0))
+  layer(Paste(Top)) = Capsule(0.588, 2.045, loc(0.0, 0.0))
+
+pcb-landpattern lp :
+  pad p[1] : capsule-smd-pad at loc(-1.90499999999997, -2.77249999999992) on Top
+  pad p[2] : capsule-smd-pad at loc(-0.634999999999991, -2.77249999999992) on Top
+  pad p[3] : capsule-smd-pad at loc(0.634999999999991, -2.77249999999992) on Top
+  pad p[4] : capsule-smd-pad at loc(1.90500000000009, -2.77249999999992) on Top
+  pad p[5] : capsule-smd-pad at loc(1.90500000000009, 2.77250000000004) on Top
+  pad p[6] : capsule-smd-pad at loc(0.634999999999991, 2.77250000000004) on Top
+  pad p[7] : capsule-smd-pad at loc(-0.634999999999991, 2.77250000000004) on Top
+  pad p[8] : capsule-smd-pad at loc(-1.90499999999997, 2.77250000000004) on Top
+
+  layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 1.0, W, loc(-1.5, 4.47810000000004), "", TrueTypeFont, false, false)
+  layer(Finish(Top)) = Text(">VALUE", 1.0, W, loc(-1.5, 3.47810000000004), "", TrueTypeFont, false, false)
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.152, [
+    Point(-2.52599999999995, -1.52149999999995), 
+    Point(-2.52599999999995, 1.52150000000006), 
+    Point(2.52600000000007, 1.52150000000006), 
+    Point(2.52600000000007, -1.52149999999995), 
+    Point(-2.52599999999995, -1.52149999999995)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.3, [Arc(-1.90499999999997, -0.76949999999988, 0.15, 0.0, -360.0)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.3, [Arc(-2.65099999999995, -2.77249999999992, 0.15, 0.0, -360.0)])
+  layer(Finish(Top)) = Polyline(0.3, [Arc(-1.90499999999997, -3.40049999999997, 0.15, 0.0, -360.0)])
+  layer(Finish(Top)) = Polyline(0.06, [Arc(-2.44999999999993, -3.00049999999987, 0.03, 0.0, -360.0)])
+  layer(Courtyard(Top)) = Rectangle(5.05200000000002, 5.54499999999996)
+
+pcb-symbol sym-TL072IDT :
+  pin OUT1 at Point(-10.1600203200406, 3.81000762001524) with :
+    direction = Left
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin IN1- at Point(-10.1600203200406, 1.27000254000508) with :
+    direction = Left
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin IN1+ at Point(-10.1600203200406, -1.27000254000508) with :
+    direction = Left
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin VCC- at Point(-10.1600203200406, -3.81000762001524) with :
+    direction = Left
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin IN2+ at Point(10.1600203200406, -3.81000762001524) with :
+    direction = Right
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin IN2- at Point(10.1600203200406, -1.27000254000508) with :
+    direction = Right
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin OUT2 at Point(10.1600203200406, 1.27000254000508) with :
+    direction = Right
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin VCC+ at Point(10.1600203200406, 3.81000762001524) with :
+    direction = Right
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+
+  layer("value") = Text(">VALUE", 0.7056, C, loc(0.0, 5.81000762001524), "", TrueTypeFont, false, false)
+  layer("reference") = Text(">REF", 0.7056, C, loc(0.0, 6.81000762001524), "", TrueTypeFont, false, false)
+  layer("foreground") = Rectangle(20.3200406400813, 12.7000254000508)
+  layer("foreground") = Circle(-8.89001778003556, 5.08001016002032, 0.381000762001524)
+
+public pcb-component component :
+  name = "C107646"
+  description = "4MHz 2 SOIC-8  FET InputAmplifiers ROHS"
+  manufacturer = "STMicroelectronics"
+  mpn = "TL072IDT"
+  datasheet = "https://datasheet.lcsc.com/lcsc/2304140030_STMicroelectronics-TL072IDT_C107646.pdf"
+  pin-properties :
+    [pin:Ref | pads:Ref ... | side:Dir | electrical-type:String | bank:Int]
+    [OUT1 | p[1] | Left | "unspecified" | 0]
+    [IN1- | p[2] | Left | "unspecified" | 0]
+    [IN1+ | p[3] | Left | "unspecified" | 0]
+    [VCC- | p[4] | Left | "unspecified" | 0]
+    [IN2+ | p[5] | Right | "unspecified" | 0]
+    [IN2- | p[6] | Right | "unspecified" | 0]
+    [OUT2 | p[7] | Right | "unspecified" | 0]
+    [VCC+ | p[8] | Right | "unspecified" | 0]
+
+  assign-landpattern(lp)
+  ;assign-symbol(sym-TL072IDT)
+  ; is there a way to double up the VCC pins?
+  val full-sym = op-amp-sym
+  val partial-sym = multi-op-amp-sym
+  symbol :
+    unit(0) = full-sym(
+      self.IN1+ => full-sym.in+
+      self.IN1- => full-sym.in-
+      self.OUT1 => full-sym.out
+      self.VCC+ => full-sym.v+
+      self.VCC- => full-sym.v-
+    )
+    unit(1) = partial-sym(
+      self.IN2+ => partial-sym.vi+
+      self.IN2- => partial-sym.vi-
+      self.OUT2 => partial-sym.vo
+    )
+
+
+
+  property(self.manufacturer) = "STMicroelectronics"
+  property(self.manufacturer_aliases) = ["STMicroelectronics"]
+  property(self.mpn) = "TL072IDT"
+  property(self.mpn_aliases) = ["TL072IDT"]
+  property(self.cofactr_id) = "IC9Q8ZFE0LOJ"
+  property(self.reference_prefix) = "U"
+  property(self.trust) = "low"
+  property(self.x) = 5.05200000000002
+  property(self.y) = 5.54499999999996
+  property(self.area) = 28.0133399999999
+  property(self.case) = "SOP-8"
+  property(self.\|vendor_part_numbers.lcsc|) = "C107646"
+  property(self.minimum_quantity) = 1
+  property(self.price) = 0.36056338
+  property(self.stock) = 2511
+
