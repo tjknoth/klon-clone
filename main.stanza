@@ -17,8 +17,7 @@ defpackage main :
 ; gain bandwidth
 
 ; Define the shape/size of the board
-; TODO: pick enclosure size, adjust
-val board-shape = RoundedRectangle(30.0, 18.5, 0.25)
+val board-shape = RoundedRectangle(93.5, 68.5, 0.25)
 
 ; Setup the board
 defn setup-board () :
@@ -53,8 +52,7 @@ pcb-module input :
   net (out, opamp-neg)
 
   symbol(GND) = ground-sym
-
-  ;schematic-group(self) = input
+  schematic-group(self) = input
 
 ; Bypass mode
 pcb-module bypass :
@@ -73,6 +71,7 @@ pcb-module bypass :
   net (r4.p[2], out)
 
   symbol(GND) = ground-sym
+  schematic-group(self) = bypass
 
 ; placeholder component for diode 1N34A 
 ; TODO: find real part
@@ -117,6 +116,9 @@ pcb-module gain :
   inst r12 : chip-resistor(422.0e3)
   inst r13 : chip-resistor(1.0e3)
   ; where is r14?
+  ; This is a placeholder to prevent off-by-one in the schematic!
+  ; not connected to anything
+  ;inst r14 : chip-resistor(100000.0) 
   inst r15 : chip-resistor(22.0e3)
   inst r16 : chip-resistor(47.0e3)
   inst r17 : chip-resistor(27.0e3)
@@ -181,15 +183,15 @@ pcb-module gain :
   net (c11.p[2], r15.p[2])
   net (r15.p[2], rv-gain-b.p[2])
   net (r15.p[2], r17.p[2])
+  net (r17.p[1], c12.p[1])
   net (r15.p[2], r18.p[2])
   net (r18.p[1], c12.p[2])
   net (c12.p[1], out)
 
   net GND (gnd, c16.p[2], d2.A)
+
   symbol(GND) = ground-sym
-
-
-
+  schematic-group(self) = gain
 
 
 ; summing opamp
@@ -216,7 +218,7 @@ pcb-module sum-amp :
   net (c13.p[2], out)
   net (opamp-out, out)
 
-  ;schematic-group(self) = sum-amp
+  schematic-group(self) = sum-amp
 
 ; tone control
 pcb-module tone :
@@ -251,6 +253,8 @@ pcb-module tone :
   net (opamp-out, out)
   net (c14.p[2], r24.p[1])
   net (r24.p[2], out)
+
+  schematic-group(self) = tone
 
 ; power supply
 pcb-module power :
@@ -309,7 +313,9 @@ pcb-module power :
   net (u3.VOUT, c19.p[1])
 
   net GND (gnd, j3.CON1, d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
+
   symbol(GND) = ground-sym
+  schematic-group(self) = power-supply
 
 
 pcb-module output :
@@ -345,7 +351,9 @@ pcb-module output :
   net (r28.p[1], jack.p[3])
 
   net GND (gnd, rv3.p[3], r28.p[2])
+
   symbol(GND) = ground-sym
+  schematic-group(self) = output
 
 
 ; Module to run as a design
@@ -415,7 +423,7 @@ pcb-module centaur :
   ;place(version-label) at loc(0.0, height(board-shape) / 2.0 - 1.0) on Bottom
 
 ; Set the design name - a directory with this name will be generated under the "designs" directory
-set-current-design("jitx-design")
+set-current-design("centaur")
 
 ; Set the schematic sheet size
 set-paper(ANSI-A)
