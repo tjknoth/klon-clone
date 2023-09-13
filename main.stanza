@@ -11,13 +11,16 @@ defpackage main :
 
 ; carl notes:
 ; can try: film capacitor, ptfe capacitor
-; c15: x7r (and other big ones)
-; small caps: c0g
 ; op amp: 
 ; gain bandwidth
 
 ; Define the shape/size of the board
 val board-shape = RoundedRectangle(93.5, 68.5, 0.25)
+
+defn c0g-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "C0G"])
+; TODO: find replacement
+defn x7r-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "X7R"])
+;defn x7r-cap (cap) : ceramic-cap(cap)
 
 ; Setup the board
 defn setup-board () :
@@ -39,7 +42,7 @@ pcb-module input :
   inst jack : pin-header(3)
   inst r1 : chip-resistor(10.0e3)
   inst r2 : chip-resistor(1.0e6)
-  inst c1 : ceramic-cap(0.1e-6)
+  inst c1 : c0g-cap(0.1e-6)
 
   net (jack.p[3], r1.p[1])
   ; jack.p[2] not used
@@ -60,7 +63,7 @@ pcb-module bypass :
   pin out
   pin gnd
 
-  inst c2 : ceramic-cap(4.7e-6)
+  inst c2 : x7r-cap(4.7e-6)
   inst r3 : chip-resistor(100.0e3)
   inst r4 : chip-resistor(560.0)
 
@@ -125,17 +128,17 @@ pcb-module gain :
   inst r18 : chip-resistor(12.0e3)
   inst r19 : chip-resistor(15.0e3)
 
-  inst c3 : ceramic-cap(0.1e-6)
-  inst c4 : ceramic-cap(68.0e-9)
-  inst c5 : ceramic-cap(68.0e-9)
-  inst c6 : ceramic-cap(390.0e-9)
-  inst c7 : ceramic-cap(82.0e-9)
-  inst c8 : ceramic-cap(390.0e-12)
-  inst c9 : ceramic-cap(1.0e-6)
-  inst c10 : ceramic-cap(1.0e-6)
-  inst c11 : ceramic-cap(2.2e-9)
-  inst c12 : ceramic-cap(27.0e-9)
-  inst c16 : ceramic-cap(1.0e-6)
+  inst c3 : c0g-cap(0.1e-6)
+  inst c4 : c0g-cap(68.0e-9)
+  inst c5 : c0g-cap(68.0e-9)
+  inst c6 : c0g-cap(390.0e-9)
+  inst c7 : c0g-cap(82.0e-9)
+  inst c8 : c0g-cap(390.0e-12)
+  inst c9 : x7r-cap(1.0e-6)
+  inst c10 : x7r-cap(1.0e-6)
+  inst c11 : c0g-cap(2.2e-9)
+  inst c12 : c0g-cap(27.0e-9)
+  inst c16 : x7r-cap(1.0e-6)
 
   inst d2 : germanium-diode
   inst d3 : germanium-diode
@@ -207,7 +210,7 @@ pcb-module sum-amp :
 
   ; components: 1 resistor, 1 cap
   inst r20 : chip-resistor(392.0e3)
-  inst c13 : ceramic-cap(820.0e-12)
+  inst c13 : c0g-cap(820.0e-12)
 
   ; nets: all in parallel
   net (in, opamp-neg)
@@ -236,7 +239,7 @@ pcb-module tone :
   inst r22 : chip-resistor(100.0e3)
   inst r23 : chip-resistor(4.7e3)
   inst r24 : chip-resistor(100.0e3)
-  inst c14 : ceramic-cap(3.9e-9)
+  inst c14 : c0g-cap(3.9e-9)
   ; 10k linear taper pot
   inst rv2 : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
 
@@ -265,12 +268,12 @@ pcb-module power :
   pin power-16v2
 
   ; capacitors
-  inst c17 : ceramic-cap(47.0e-6)
-  inst c18 : ceramic-cap(47.0e-6)
-  inst c19 : ceramic-cap(1.0e-6)
-  inst c20 : ceramic-cap(1.0e-6)
-  inst c21 : ceramic-cap(1.0e-6)
-  inst c22 : ceramic-cap(1.0e-6)
+  inst c17 : x7r-cap(47.0e-6)
+  inst c18 : x7r-cap(47.0e-6)
+  inst c19 : x7r-cap(1.0e-6)
+  inst c20 : x7r-cap(1.0e-6)
+  inst c21 : x7r-cap(1.0e-6)
+  inst c22 : x7r-cap(1.0e-6)
   ; resistors
   inst r29 : chip-resistor(27.0e3)
   inst r30 : chip-resistor(27.0e3)
@@ -333,7 +336,7 @@ pcb-module output :
   ; audio taper 10k pot
   inst rv3 : database-part(["mpn" => "RK1631110TT3", "manufacturer" => "ALPSALPINE"])
   ; capacitors and resistors
-  inst c15 : ceramic-cap(4.7e-6)
+  inst c15 : x7r-cap(4.7e-6)
   inst r25 : chip-resistor(560.0)
   inst r243 : chip-resistor(68.0e3)
   inst r242 : chip-resistor(68.0e3)

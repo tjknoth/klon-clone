@@ -3,3 +3,4 @@
 open-components-database/
 parts-db/
 .vscode/
+*.backup-*
