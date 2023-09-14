@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name centaur)(type KiCad)(uri "$(KIPRJMOD)/centaur.pretty")(options "")(descr ""))
+)

@@ -11,11 +11,31 @@ defpackage main :
 
 ; carl notes:
 ; can try: film capacitor, ptfe capacitor
-; op amp: 
-; gain bandwidth
+
+pcb-material copper :
+  type = Conductor
+  name = "Copper"
+  
+pcb-material core :
+  type = Dielectric
+  dielectric-coefficient = 4.26
+  name = "PR4 Core"
+
+pcb-material soldermask :
+  type = Dielectric
+  dielectric-coefficient = 3.9
+  name = "Taiyo BSN4000"
+
+public pcb-stackup jlcpcb-jlc-2layer:
+  name = "JLCPCB 2-layer 1.6mm"
+  layer(0.019, soldermask) ; 0.5mil over conductor
+  layer(0.035, copper) 
+  layer(1.2650, core)
+  layer(0.035, copper) 
+  layer(0.019, soldermask) ; 0.5mil over conductor
 
 ; Define the shape/size of the board
-val board-shape = RoundedRectangle(93.5, 68.5, 0.25)
+val board-shape = RoundedRectangle(68.5, 93.5, 0.25)
 
 defn c0g-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "C0G"])
 ; TODO: find replacement
@@ -24,7 +44,7 @@ defn x7r-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient
 
 ; Setup the board
 defn setup-board () :
-  set-board(ocdb/utils/defaults/default-board(ocdb/manufacturers/stackups/jlcpcb-jlc2313, board-shape))
+  set-board(ocdb/utils/defaults/default-board(jlcpcb-jlc-2layer, board-shape))
   set-rules(ocdb/manufacturers/rules/jlcpcb-rules)
 
 ; Input stage 
@@ -39,7 +59,12 @@ pcb-module input :
 
 
   ; Components: input jack header, two resistors and a cap
+  inst in-jack-msg-base : ocdb/artwork/board-text/text("base", 1.0, 0.0)
+  place(in-jack-msg-base) at loc(-32.3, 1.85) on Top
+  val in-jack-msg-tip = ocdb/artwork/board-text/text("tip", 2.0, 0.0)
+  val in-jack-msg-mid = ocdb/artwork/board-text/text("mid", 2.0, 0.0)
   inst jack : pin-header(3)
+  reference-designator(jack) = "input jack"
   inst r1 : chip-resistor(10.0e3)
   inst r2 : chip-resistor(1.0e6)
   inst c1 : c0g-cap(0.1e-6)
@@ -76,22 +101,6 @@ pcb-module bypass :
   symbol(GND) = ground-sym
   schematic-group(self) = bypass
 
-; placeholder component for diode 1N34A 
-; TODO: find real part
-pcb-component germanium-diode :
-  pin A
-  pin K
-  val sym = diode-sym(DiodeStd)
-  symbol = sym(
-    A => sym.a,
-    K => sym.c
-  )
-  ; Is this an OK landpattern?
-  val lp = ipc-two-pin-landpattern("0402")
-  landpattern = lp(
-    A => lp.p[1]
-    K => lp.p[2]
-  )
 
 ; opamp gain
 pcb-module gain :
@@ -108,7 +117,9 @@ pcb-module gain :
   ; TODO: what's the deal with gain-a? connected to constant power supply
   ;inst rv-gain-a : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
   ;inst rv-gain : database-part(["mpn" => "RK16312A0B85", "manufacturer" => "ALPSALPINE"]) 
-  inst rv-gain : database-part(["mpn" => "RK16312A0BKR", "manufacturer" => "ALPSALPINE"])
+  ;inst rv-gain : database-part(["mpn" => "RK16312A0BKR", "manufacturer" => "ALPSALPINE"])
+  inst rv-gain : components/ALPSALPINE/RK16312A0BKR/component
+  reference-designator(rv-gain) = "gain"
 
   inst r5 : chip-resistor(5.1e3)
   inst r6 : chip-resistor(10.0e3)
@@ -141,8 +152,13 @@ pcb-module gain :
   inst c12 : c0g-cap(27.0e-9)
   inst c16 : x7r-cap(1.0e-6)
 
-  inst d2 : germanium-diode
-  inst d3 : germanium-diode
+  ; pin headers for germanium diodes (1N34A)
+  ; d2: p[1] => A, p[2] => K
+  inst d2 : pin-header(2)
+  reference-designator(d2) = "germanium-diode-1"
+  ; d3: p[1] => A, p[2] => K
+  inst d3 : pin-header(2)
+  reference-designator(d3) = "germanium-diode-2"
 
   ; so many nets
   net (in, r5.p[1])
@@ -177,10 +193,10 @@ pcb-module gain :
   net (r12.p[2], opamp-out)
   net (opamp-out, c9.p[1])
   net (c9.p[2], r13.p[1])
-  net (r13.p[2], d2.K)
-  net (d2.A, d3.K)
-  net (d2.K, d3.A)
-  net (d3.A, c10.p[1])
+  net (r13.p[2], d2.p[2])
+  net (d2.p[1], d3.p[2])
+  net (d2.p[2], d3.p[1])
+  net (d3.p[1], c10.p[1])
   net (c10.p[2], r16.p[1])
   net (r16.p[2], out)
   net (c10.p[2], c11.p[1])
@@ -192,7 +208,7 @@ pcb-module gain :
   net (r18.p[1], c12.p[2])
   net (c12.p[1], out)
 
-  net GND (gnd, c16.p[2], d2.A)
+  net GND (gnd, c16.p[2], d2.p[1])
 
   symbol(GND) = ground-sym
   schematic-group(self) = gain
@@ -242,15 +258,16 @@ pcb-module tone :
   inst r24 : chip-resistor(100.0e3)
   inst c14 : c0g-cap(3.9e-9)
   ; 10k linear taper pot
-  inst rv2 : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
+  inst rv-tone : components/ALPSALPINE/RK1631110U1Q/component
+  reference-designator(rv-tone) = "tone"
 
   ; nets
   net (in, r21.p[1])
   net (in, r22.p[1])
-  net (r21.p[2], rv2.p[1])
-  net (rv2.p[3], r23.p[1])
+  net (r21.p[2], rv-tone.p[1])
+  net (rv-tone.p[3], r23.p[1])
   net (r23.p[2], out)
-  net (rv2.p[2], c14.p[1])
+  net (rv-tone.p[2], c14.p[1])
   net (c14.p[2], r22.p[2])
   net (r22.p[2], opamp-neg)
   net (power-4v5, opamp-pos)
@@ -268,32 +285,49 @@ pcb-module power :
   pin power-n8v6
   pin power-16v2
 
+  ; All instances have reference designators for easier
+  ;  sub-layout sorting
+
   ; capacitors
   inst c17 : x7r-cap(47.0e-6)
+  reference-designator(c17) = "power.c17"
   inst c18 : x7r-cap(47.0e-6)
+  reference-designator(c18) = "power.c18"
   inst c19 : x7r-cap(1.0e-6)
+  reference-designator(c19) = "power.c19"
   inst c20 : x7r-cap(1.0e-6)
+  reference-designator(c20) = "power.c20"
   inst c21 : x7r-cap(1.0e-6)
+  reference-designator(c21) = "power.c21"
   inst c22 : x7r-cap(1.0e-6)
+  reference-designator(c22) = "power.c22"
   ; resistors
   inst r29 : chip-resistor(27.0e3)
+  reference-designator(r29) = "power.r29"
   inst r30 : chip-resistor(27.0e3)
+  reference-designator(r30) = "power.r30"
   ; Zener diode
   ; A is base of triangle
   ; C/K is tip
   inst d4 : database-part(["mpn" => "1N4742A", "manufacturer" => "Tak Cheong"])
+  reference-designator(d4) = "power.d4"
   ; Normal diodes
   inst d7 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
+  reference-designator(d7) = "power.d7"
   inst d8 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
+  reference-designator(d8) = "power.d8"
   ; DC power jack
-  inst j3 : database-part(["mpn" => "DC-060A", "manufacturer" => "HRO Electronics"])
+  ; Pin header as placeholder. p[1] => CON1, p[2] => CON2
+  inst j3 : pin-header(2) ;database-part(["mpn" => "DC-060A", "manufacturer" => "HRO Electronics"])
+  reference-designator(j3) = "power"
   ; Voltage converter 
   inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
+  reference-designator(u3) = "converter"
 
   ; Connect power, diode, capacitor c17
-  net (j3.CON2, d4.K)
-  net (c17.p[2], j3.CON2)
-  net (power-9v, j3.CON2)
+  net (j3.p[2], d4.K)
+  net (c17.p[2], j3.p[2])
+  net (power-9v, j3.p[2])
 
   ; 4v5 sub-circuit
   net (power-9v, r29.p[1])
@@ -316,7 +350,7 @@ pcb-module power :
   net (u3.VOUT, power-n8v6)
   net (u3.VOUT, c19.p[1])
 
-  net GND (gnd, j3.CON1, d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
+  net GND (gnd, j3.p[1], d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
 
   symbol(GND) = ground-sym
   schematic-group(self) = power-supply
@@ -335,7 +369,8 @@ pcb-module output :
   inst sw1 : pin-header(3)
   reference-designator(sw1) = "switch"
   ; audio taper 10k pot
-  inst rv3 : database-part(["mpn" => "RK1631110TT3", "manufacturer" => "ALPSALPINE"])
+  inst rv-level : components/ALPSALPINE/RK1631110U1Q/component
+  reference-designator(rv-level) = "output"
   ; capacitors and resistors
   inst c15 : x7r-cap(4.7e-6)
   inst r25 : chip-resistor(560.0)
@@ -346,18 +381,18 @@ pcb-module output :
   ; nets
   net (gain-in, c15.p[1])
   net (c15.p[2], r25.p[1])
-  net (r25.p[2], rv3.p[1])
-  net (rv3.p[2], sw1.p[2])
+  net (r25.p[2], rv-level.p[1])
+  net (rv-level.p[2], sw1.p[2])
   net (bypass-in, r243.p[1])
   net (bypass-in, sw1.p[1])
   net (r243.p[2], sw1.p[3])
   net (r242.p[2], sw1.p[3])
-  net (r242.p[1], rv3.p[2])
+  net (r242.p[1], rv-level.p[2])
   net (sw1.p[3], jack.p[1])
   net (r28.p[1], jack.p[2])
   net (r28.p[1], jack.p[3])
 
-  net GND (gnd, rv3.p[3], r28.p[2])
+  net GND (gnd, rv-level.p[3], r28.p[2])
 
   symbol(GND) = ground-sym
   schematic-group(self) = output
@@ -379,9 +414,9 @@ pcb-module centaur :
   ; instantate op-amps
   ;inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
   inst u1 : components/STMicroelectronics/TL072IDT/component
-  reference-designator(u1) = "U1"
+  reference-designator(u1) = "U1: input/gain"
   inst u2 : components/STMicroelectronics/TL072IDT/component
-  reference-designator(u2) = "U2"
+  reference-designator(u2) = "U2: summing/tone"
   ;inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
 
   ; net 9v op-amp
@@ -416,16 +451,20 @@ pcb-module centaur :
   symbol(GND) = ground-sym
 
   ; Net power module to all sub-modules
-  net (power.power-9v, input.power-9v)
-  net (power.power-9v, gain.power-9v)
-  net (power.power-4v5, input.power-4v5)
-  net (power.power-4v5, gain.power-4v5)
-  net (power.power-4v5, sum-amp.power-4v5)
-  net (power.power-4v5, tone.power-4v5)
-  net (power.power-n8v6, sum-amp.power-n8v6)
-  net (power.power-n8v6, tone.power-n8v6)
-  net (power.power-16v2, sum-amp.power-16v2)
-  net (power.power-16v2, tone.power-16v2)
+  net VCC9v (power.power-9v, input.power-9v, gain.power-9v)
+  net VCC4v5 (power.power-4v5, input.power-4v5, gain.power-4v5, sum-amp.power-4v5, tone.power-4v5)
+  net VCCn8v6 (power.power-n8v6, sum-amp.power-n8v6, tone.power-n8v6)
+  net VCC16v2 (power.power-16v2, sum-amp.power-16v2, tone.power-16v2)
+
+  val power-net-class = NetClass(`Power, [`min-trace => 0.40])
+  for n in [VCC4v5, VCC9v, VCCn8v6, VCC16v2] do :
+    property(n.net-class) = power-net-class
+
+  ; Add ground planes
+  geom(GND) :    
+    copper-pour(LayerIndex(0), isolate = 0.1, rank = 1) = board-shape
+    copper-pour(LayerIndex(1), isolate = 0.1, rank = 1) = board-shape
+
 
 
   ; Write the board version on silkscreen

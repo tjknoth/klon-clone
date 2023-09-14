@@ -1,0 +1,139 @@
+; This file is generated based on the parts database query below:")
+;   database-part(["manufacturer" => "ALPSALPINE", "mpn" => "RK16312A0BKR"])
+#use-added-syntax(jitx)
+defpackage components/ALPSALPINE/RK16312A0BKR :
+  import core
+  import jitx
+  import jitx/commands
+
+
+pcb-pad circle-th-pad :
+  name = "circle-th-pad"
+  type = TH
+  shape = Circle(1.0)
+  layer(SolderMask(Top)) = Circle(1.051)
+  layer(SolderMask(Bottom)) = Circle(1.051)
+  layer(Cutout()) = Circle(0.65)
+
+pcb-landpattern lp :
+  pad p[1] : circle-th-pad at loc(-6.43350000000009, -5.00099999999998) on Top
+  pad p[2] : circle-th-pad at loc(-6.43350000000009, -0.000999999999976353) on Top
+  pad p[3] : circle-th-pad at loc(-6.43350000000009, 4.99900000000002) on Top
+  pad p[4] : circle-th-pad at loc(-11.4335000000001, -5.00099999999998) on Top
+  pad p[5] : circle-th-pad at loc(-11.4335000000001, -0.000999999999976353) on Top
+  pad p[6] : circle-th-pad at loc(-11.4335000000001, 4.99900000000002) on Top
+
+  layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 1.0, W, loc(-1.5, 9.70659999999998), "", TrueTypeFont, false, false)
+  layer(Finish(Top)) = Text(">VALUE", 1.0, W, loc(-1.5, 8.70659999999998), "", TrueTypeFont, false, false)
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-2.62350000000004, 8.00099999999998), Point(-2.62350000000004, -7.99900000000002)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-13.9265, 8.00099999999998), Point(-13.9265, -8.0)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-2.62350000000004, 8.00099999999998), Point(-13.9265, 8.00099999999998)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-13.9265, -8.00099999999998), Point(-2.62350000000004, -8.00099999999998)])
+  ;layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-1.48050000000012, -5.08000000000004), Point(-2.62350000000004, -5.08000000000004)])
+  ;layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-1.48050000000012, 5.08000000000004), Point(-1.48050000000012, -5.04599999999994)])
+  ;layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-2.62350000000004, 5.08000000000004), Point(-1.48050000000012, 5.08000000000004)])
+  ;layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+  ;  Point(-1.48050000000012, 3.93299999999999), 
+  ;  Point(3.76649999999995, 3.93299999999999), 
+  ;  Point(3.76649999999995, -3.93799999999999), 
+  ;  Point(-1.48050000000012, -3.93799999999999)])
+  ;layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+  ;  Point(3.8934999999999, 3.04700000000003), 
+  ;  Point(13.9264999999998, 3.04700000000003), 
+  ;  Point(13.9264999999998, -2.92200000000003), 
+  ;  Point(3.76649999999995, -2.92200000000003)])
+  ;layer(Finish(Top)) = Polyline(0.06, [Arc(14.0535, -8.12900000000002, 0.03, 0.0, -360.0)])
+  ;layer(Courtyard(Top)) = Rectangle(27.8529999999998, 16.002)
+
+pcb-symbol sym-RK16312A0BKR :
+  pin p[1] at Point(2.54000508001016, 2.54000508001016) with :
+    direction = Right
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin p[2] at Point(0.0, 3.81000762001524) with :
+    direction = Up
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin p[3] at Point(-2.54000508001016, 2.54000508001016) with :
+    direction = Left
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin p[6] at Point(-2.54000508001016, -2.54000508001016) with :
+    direction = Left
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin p[5] at Point(0.0, -3.81000762001524) with :
+    direction = Down
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+  pin p[4] at Point(2.54000508001016, -2.54000508001016) with :
+    direction = Right
+    length = 2.54000508001016
+    number-size = 1.0
+    name-size = 1.0
+
+  layer("value") = Text(">VALUE", 0.7056, C, loc(0.0, 5.81000762001524), "", TrueTypeFont, false, false)
+  layer("reference") = Text(">REF", 0.7056, C, loc(0.0, 6.81000762001524), "", TrueTypeFont, false, false)
+  layer("foreground") = Polyline(0.254000508001016, [
+    Point(-2.54000508001016, 3.55600711201422), 
+    Point(2.54000508001016, 3.55600711201422), 
+    Point(2.54000508001016, 1.01600203200406), 
+    Point(-2.54000508001016, 1.01600203200406), 
+    Point(-2.54000508001016, 3.55600711201422)])
+  layer("foreground") = Polyline(0.254000508001016, [Point(0.0, 4.06400812801626), Point(0.0, 5.33401066802134)])
+  layer("foreground") = Polyline(0.254000508001016, [
+    Point(2.54000508001016, -3.55600711201422), 
+    Point(-2.54000508001016, -3.55600711201422), 
+    Point(-2.54000508001016, -1.01600203200406), 
+    Point(2.54000508001016, -1.01600203200406), 
+    Point(2.54000508001016, -3.55600711201422)])
+  layer("foreground") = Polyline(0.254000508001016, [Point(0.0, -4.06400812801626), Point(0.0, -5.33401066802134)])
+  layer("foreground") = Polygon([Point(0.0, 3.55600711201422), Point(-0.508001016002032, 4.8260096520193), Point(0.508001016002032, 4.8260096520193)])
+  layer("foreground") = Polygon([Point(0.0, -3.55600711201422), Point(0.508001016002032, -4.8260096520193), Point(-0.508001016002032, -4.8260096520193)])
+
+public pcb-component component :
+  name = "C370979"
+  description = "±20% 50mW 10kΩ Plugin  Variable Resistors/Potentiometers ROHS"
+  manufacturer = "ALPSALPINE"
+  mpn = "RK16312A0BKR"
+  emodel = Resistor(10000.0, 0.2, 50000.0)
+  datasheet = "https://datasheet.lcsc.com/lcsc/1912111437_ALPSALPINE-RK16312A0BKR_C370979.pdf"
+  pin-properties :
+    [pin:Ref | pads:Ref ... | side:Dir | electrical-type:String | bank:Int]
+    [p[1] | p[1] | Right | "input" | 0]
+    [p[2] | p[2] | Up | "input" | 0]
+    [p[3] | p[3] | Left | "input" | 0]
+    [p[6] | p[6] | Left | "input" | 0]
+    [p[5] | p[5] | Down | "input" | 0]
+    [p[4] | p[4] | Right | "input" | 0]
+
+  assign-landpattern(lp)
+  assign-symbol(sym-RK16312A0BKR)
+
+  property(self.category) = "resistor"
+  property(self.manufacturer) = "ALPSALPINE"
+  property(self.manufacturer_aliases) = ["ALPSALPINE"]
+  property(self.mpn) = "RK16312A0BKR"
+  property(self.mpn_aliases) = ["RK16312A0BKR"]
+  property(self.cofactr_id) = "XX2BB09YKBKG"
+  property(self.reference_prefix) = "R"
+  property(self.trust) = "low"
+  property(self.x) = 27.8529999999998
+  property(self.y) = 16.002
+  property(self.area) = 445.703705999996
+  property(self.case) = "Plugin"
+  property(self.\|vendor_part_numbers.lcsc|) = "C370979"
+  property(self.minimum_quantity) = 1
+  property(self.price) = 2.138028169
+  property(self.stock) = 507
+  property(self.rated-power) = 50000.0
+  property(self.resistor) = true
+  property(self.resistance) = 10000.0
+  property(self.tolerance) = Toleranced(0.0, 0.2, 0.2)
+  property(self.\|metadata.description|) = "±20% 50mW 10kΩ Plugin  Variable Resistors/Potentiometers ROHS"
+
