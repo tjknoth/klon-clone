@@ -42,6 +42,7 @@ defn c0g-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient
 defn x7r-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "X7R"])
 ;defn x7r-cap (cap) : ceramic-cap(cap)
 
+defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
 defn setup-board () :
   set-board(ocdb/utils/defaults/default-board(jlcpcb-jlc-2layer, board-shape))
@@ -59,12 +60,8 @@ pcb-module input :
 
 
   ; Components: input jack header, two resistors and a cap
-  inst in-jack-msg-base : ocdb/artwork/board-text/text("base", 1.0, 0.0)
-  place(in-jack-msg-base) at loc(-32.3, 1.85) on Top
-  val in-jack-msg-tip = ocdb/artwork/board-text/text("tip", 2.0, 0.0)
-  val in-jack-msg-mid = ocdb/artwork/board-text/text("mid", 2.0, 0.0)
   inst jack : pin-header(3)
-  reference-designator(jack) = "input jack"
+  ;reference-designator(jack) = "input jack"
   inst r1 : chip-resistor(10.0e3)
   inst r2 : chip-resistor(1.0e6)
   inst c1 : c0g-cap(0.1e-6)
@@ -81,6 +78,16 @@ pcb-module input :
 
   symbol(GND) = ground-sym
   schematic-group(self) = input
+
+  ; Input jack pin labels
+  inst in-jack-msg-base : header-label("base")
+  place(in-jack-msg-base) at loc(-32.3, 1.85) on Top
+  inst in-jack-msg-tip : header-label("tip")
+  place(in-jack-msg-tip) at loc(-32.3, -3.80) on Top
+  inst in-jack-msg-mid : header-label("mid")
+  place(in-jack-msg-mid) at loc(-32.3, -0.85) on Top
+
+
 
 ; Bypass mode
 pcb-module bypass :
@@ -159,6 +166,19 @@ pcb-module gain :
   ; d3: p[1] => A, p[2] => K
   inst d3 : pin-header(2)
   reference-designator(d3) = "germanium-diode-2"
+
+  ;inst d2A-msg : header-label("A")
+  ;place(d2A-msg) at loc(-32.3, 1.85) on Top
+  ;inst d2K-msg : header-label("A")
+  ;place(d2K-msg) at loc(-32.3, 1.85) on Top
+  ;inst d3A-msg : header-label("K")
+  ;place(d3A-msg) at loc(-32.3, 1.85) on Top
+  ;inst d3K-msg : header-label("K")
+  ;place(d3K-msg) at loc(-32.3, 1.85) on Top
+ 
+
+
+
 
   ; so many nets
   net (in, r5.p[1])
