@@ -474,7 +474,7 @@ pcb-module centaur :
   place(output.jack) at loc(28.8, -1.0) on Top
   ; Input jack pin labels
   inst in-jack-msg-base : header-label("sleeve")
-  place(in-jack-msg-base) at loc(-32.3, 1.85) on Top
+  place(in-jack-msg-base) at loc(-31.0, 4.00) on Top
   inst in-jack-msg-tip : header-label("tip")
   place(in-jack-msg-tip) at loc(-32.3, -3.80) on Top
   inst in-jack-msg-mid : header-label("plug")
@@ -490,7 +490,7 @@ pcb-module centaur :
   place(d3K-msg) at loc(-9.3, 3.85) on Top
   ; Output jack pin labels
   inst out-jack-msg-base : header-label("sleeve")
-  place(out-jack-msg-base) at loc(32.3, 1.85) on Top
+  place(out-jack-msg-base) at loc(31.0, 4.00) on Top
   inst out-jack-msg-tip : header-label("tip")
   place(out-jack-msg-tip) at loc(32.3, -3.80) on Top
   inst out-jack-msg-mid : header-label("plug")
