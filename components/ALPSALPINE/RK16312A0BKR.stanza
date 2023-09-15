@@ -23,8 +23,8 @@ pcb-landpattern lp :
   pad p[5] : circle-th-pad at loc(-11.4335000000001, -0.000999999999976353) on Top
   pad p[6] : circle-th-pad at loc(-11.4335000000001, 4.99900000000002) on Top
 
-  layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 1.0, W, loc(-1.5, 9.70659999999998), "", TrueTypeFont, false, false)
-  layer(Finish(Top)) = Text(">VALUE", 1.0, W, loc(-1.5, 8.70659999999998), "", TrueTypeFont, false, false)
+  ;layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 1.0, W, loc(-1.5, 9.70659999999998), "", TrueTypeFont, false, false)
+  ;layer(Finish(Top)) = Text(">VALUE", 1.0, W, loc(-1.5, 8.70659999999998), "", TrueTypeFont, false, false)
   layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-2.62350000000004, 8.00099999999998), Point(-2.62350000000004, -7.99900000000002)])
   layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-13.9265, 8.00099999999998), Point(-13.9265, -8.0)])
   layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-2.62350000000004, 8.00099999999998), Point(-13.9265, 8.00099999999998)])

@@ -60,7 +60,7 @@ pcb-module input :
 
 
   ; Components: input jack header, two resistors and a cap
-  inst jack : pin-header(3)
+  public inst jack : pin-header(3)
   ;reference-designator(jack) = "input jack"
   inst r1 : chip-resistor(10.0e3)
   inst r2 : chip-resistor(1.0e6)
@@ -78,16 +78,7 @@ pcb-module input :
 
   symbol(GND) = ground-sym
   schematic-group(self) = input
-
-  ; Input jack pin labels
-  inst in-jack-msg-base : header-label("base")
-  place(in-jack-msg-base) at loc(-32.3, 1.85) on Top
-  inst in-jack-msg-tip : header-label("tip")
-  place(in-jack-msg-tip) at loc(-32.3, -3.80) on Top
-  inst in-jack-msg-mid : header-label("mid")
-  place(in-jack-msg-mid) at loc(-32.3, -0.85) on Top
-
-
+  
 
 ; Bypass mode
 pcb-module bypass :
@@ -126,7 +117,7 @@ pcb-module gain :
   ;inst rv-gain : database-part(["mpn" => "RK16312A0B85", "manufacturer" => "ALPSALPINE"]) 
   ;inst rv-gain : database-part(["mpn" => "RK16312A0BKR", "manufacturer" => "ALPSALPINE"])
   inst rv-gain : components/ALPSALPINE/RK16312A0BKR/component
-  reference-designator(rv-gain) = "gain"
+  ;reference-designator(rv-gain) = "gain"
 
   inst r5 : chip-resistor(5.1e3)
   inst r6 : chip-resistor(10.0e3)
@@ -162,21 +153,10 @@ pcb-module gain :
   ; pin headers for germanium diodes (1N34A)
   ; d2: p[1] => A, p[2] => K
   inst d2 : pin-header(2)
-  reference-designator(d2) = "germanium-diode-1"
+  ; reference-designator(d2) = "germanium-diode-1"
   ; d3: p[1] => A, p[2] => K
   inst d3 : pin-header(2)
-  reference-designator(d3) = "germanium-diode-2"
-
-  ;inst d2A-msg : header-label("A")
-  ;place(d2A-msg) at loc(-32.3, 1.85) on Top
-  ;inst d2K-msg : header-label("A")
-  ;place(d2K-msg) at loc(-32.3, 1.85) on Top
-  ;inst d3A-msg : header-label("K")
-  ;place(d3A-msg) at loc(-32.3, 1.85) on Top
-  ;inst d3K-msg : header-label("K")
-  ;place(d3K-msg) at loc(-32.3, 1.85) on Top
- 
-
+  ; reference-designator(d3) = "germanium-diode-2"
 
 
 
@@ -279,7 +259,7 @@ pcb-module tone :
   inst c14 : c0g-cap(3.9e-9)
   ; 10k linear taper pot
   inst rv-tone : components/ALPSALPINE/RK1631110U1Q/component
-  reference-designator(rv-tone) = "tone"
+  ;reference-designator(rv-tone) = "tone"
 
   ; nets
   net (in, r21.p[1])
@@ -310,39 +290,39 @@ pcb-module power :
 
   ; capacitors
   inst c17 : x7r-cap(47.0e-6)
-  reference-designator(c17) = "power.c17"
+  ;reference-designator(c17) = "power.c17"
   inst c18 : x7r-cap(47.0e-6)
-  reference-designator(c18) = "power.c18"
+  ;reference-designator(c18) = "power.c18"
   inst c19 : x7r-cap(1.0e-6)
-  reference-designator(c19) = "power.c19"
+  ;reference-designator(c19) = "power.c19"
   inst c20 : x7r-cap(1.0e-6)
-  reference-designator(c20) = "power.c20"
+  ;reference-designator(c20) = "power.c20"
   inst c21 : x7r-cap(1.0e-6)
-  reference-designator(c21) = "power.c21"
+  ;reference-designator(c21) = "power.c21"
   inst c22 : x7r-cap(1.0e-6)
-  reference-designator(c22) = "power.c22"
+  ;reference-designator(c22) = "power.c22"
   ; resistors
   inst r29 : chip-resistor(27.0e3)
-  reference-designator(r29) = "power.r29"
+  ;reference-designator(r29) = "power.r29"
   inst r30 : chip-resistor(27.0e3)
-  reference-designator(r30) = "power.r30"
+  ;reference-designator(r30) = "power.r30"
   ; Zener diode
   ; A is base of triangle
   ; C/K is tip
   inst d4 : database-part(["mpn" => "1N4742A", "manufacturer" => "Tak Cheong"])
-  reference-designator(d4) = "power.d4"
+  ;reference-designator(d4) = "power.d4"
   ; Normal diodes
   inst d7 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
-  reference-designator(d7) = "power.d7"
+  ;reference-designator(d7) = "power.d7"
   inst d8 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
-  reference-designator(d8) = "power.d8"
+  ;reference-designator(d8) = "power.d8"
   ; DC power jack
   ; Pin header as placeholder. p[1] => CON1, p[2] => CON2
   inst j3 : pin-header(2) ;database-part(["mpn" => "DC-060A", "manufacturer" => "HRO Electronics"])
-  reference-designator(j3) = "power"
+  ;reference-designator(j3) = "power"
   ; Voltage converter 
   inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
-  reference-designator(u3) = "converter"
+  ;reference-designator(u3) = "converter"
 
   ; Connect power, diode, capacitor c17
   net (j3.p[2], d4.K)
@@ -384,13 +364,13 @@ pcb-module output :
   ; panel mount jack and SPDT switch
   ; jack: p1 = tip, p2 = connector, p3 = shoulder
   ; switch: p1,2 = throws 
-  inst jack : pin-header(3)
-  reference-designator(jack) = "output jack"
+  public inst jack : pin-header(3)
+  ;reference-designator(jack) = "output jack"
   inst sw1 : pin-header(3)
-  reference-designator(sw1) = "switch"
+  ;reference-designator(sw1) = "switch"
   ; audio taper 10k pot
   inst rv-level : components/ALPSALPINE/RK1631110U1Q/component
-  reference-designator(rv-level) = "output"
+  ;reference-designator(rv-level) = "output"
   ; capacitors and resistors
   inst c15 : x7r-cap(4.7e-6)
   inst r25 : chip-resistor(560.0)
@@ -434,9 +414,9 @@ pcb-module centaur :
   ; instantate op-amps
   ;inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
   inst u1 : components/STMicroelectronics/TL072IDT/component
-  reference-designator(u1) = "U1: input/gain"
+  ;reference-designator(u1) = "U1: input/gain"
   inst u2 : components/STMicroelectronics/TL072IDT/component
-  reference-designator(u2) = "U2: summing/tone"
+  ;reference-designator(u2) = "U2: summing/tone"
   ;inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
 
   ; net 9v op-amp
@@ -484,6 +464,54 @@ pcb-module centaur :
   geom(GND) :    
     copper-pour(LayerIndex(0), isolate = 0.1, rank = 1) = board-shape
     copper-pour(LayerIndex(1), isolate = 0.1, rank = 1) = board-shape
+
+
+  ; Place labels and a few symmetric components
+  ;
+  ; Input/output jacks
+  ; These placements don't actually apply due to PD bug
+  place(input.jack) at loc(-28.8, -1.0) on Top
+  place(output.jack) at loc(28.8, -1.0) on Top
+  ; Input jack pin labels
+  inst in-jack-msg-base : header-label("sleeve")
+  place(in-jack-msg-base) at loc(-32.3, 1.85) on Top
+  inst in-jack-msg-tip : header-label("tip")
+  place(in-jack-msg-tip) at loc(-32.3, -3.80) on Top
+  inst in-jack-msg-mid : header-label("plug")
+  place(in-jack-msg-mid) at loc(-32.3, -0.85) on Top
+  ; germanium diode pins 
+  inst d2A-msg : header-label("A")
+  place(d2A-msg) at loc(-18.2, 3.85) on Top
+  inst d2K-msg : header-label("K")
+  place(d2K-msg) at loc(-18.2, 1.2) on Top
+  inst d3A-msg : header-label("A")
+  place(d3A-msg) at loc(-9.3, 1.2) on Top
+  inst d3K-msg : header-label("K")
+  place(d3K-msg) at loc(-9.3, 3.85) on Top
+  ; Output jack pin labels
+  inst out-jack-msg-base : header-label("sleeve")
+  place(out-jack-msg-base) at loc(32.3, 1.85) on Top
+  inst out-jack-msg-tip : header-label("tip")
+  place(out-jack-msg-tip) at loc(32.3, -3.80) on Top
+  inst out-jack-msg-mid : header-label("plug")
+  place(out-jack-msg-mid) at loc(32.3, -0.85) on Top
+  ; Potentiometer labels
+  inst gain-msg : header-label("gain")
+  place(gain-msg) at loc(-21.0, 43.0) on Top
+  inst tone-msg : header-label("tone")
+  place(tone-msg) at loc(0.0, 43.0) on Top
+  inst output-msg : header-label("output")
+  place(output-msg) at loc(21.0, 43.0) on Top
+  ; Switch labels
+  inst bypass-msg : header-label("off")
+  place(bypass-msg) at loc(29.0, 27.0) on Top
+  inst on-msg : header-label("on")
+  place(on-msg) at loc(23.8, 24.2) on Top
+  inst out-msg : header-label("out")
+  place(out-msg) at loc(18.5, 27.0) on Top
+
+
+
 
 
 
