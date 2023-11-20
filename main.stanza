@@ -359,7 +359,7 @@ pcb-module power :
   reference-designator(j3) = "J3"
   ; Voltage converter 
   inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
-  reference-designator(u3) = "converter"
+  reference-designator(u3) = "U3"
 
   ; Connect power, diode, capacitor c17
   net (j3.p[2], d4.K)
