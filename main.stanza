@@ -501,11 +501,11 @@ pcb-module centaur :
   val power-nets = [VCC4v5, VCC9v, VCCn8v6, VCC16v2]
 
   ; Apply default net class to all nets
-  ;val default-net-class = NetClass(`Default, [`min-trace => 0.40])
-  ;for x in all-connected-items(self) do :
-  ;  for n in nets(x) do :
-  ;    if not (contains?(power-nets, n)) :
-  ;      property(n.net-class) = default-net-class
+  val default-net-class = NetClass(`Default, [`min-trace => 0.40])
+  for x in all-connected-items(self) do :
+    for n in nets(x) do :
+      if not any?({connected?([_, n])}, power-nets) :
+        property(n.net-class) = default-net-class
 
   ; Even thicker traces for power nets
   val power-net-class = NetClass(`Power, [`min-trace => 1.20])
