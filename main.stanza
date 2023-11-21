@@ -11,6 +11,14 @@ defpackage main :
 ; carl notes:
 ; can try: film capacitor, ptfe capacitor
 
+pcb-via default-via :
+  name = "default-via"
+  start = LayerIndex(0, Top)
+  stop = LayerIndex(0, Bottom)
+  diameter = 0.46
+  hole-diameter = 0.2
+  type = LaserDrill ; is this right?
+
 pcb-material copper :
   type = Conductor
   name = "Copper"
@@ -36,6 +44,14 @@ public pcb-stackup jlcpcb-jlc-2layer:
 ; Define the shape/size of the board
 val board-shape = RoundedRectangle(68.5, 93.5, 0.25)
 
+pcb-board centaur-board :
+  stackup = ocdb/manufacturers/stackups/jlcpcb-jlc2313
+  boundary = board-shape
+  signal-boundary = board-shape
+  vias = [default-via]
+
+
+
 defn c0g-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "C0G"])
 ; TODO: find replacement
 defn x7r-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "X7R"])
@@ -44,7 +60,7 @@ defn x7r-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient
 defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
 defn setup-board () :
-  set-board(ocdb/utils/defaults/default-board(ocdb/manufacturers/stackups/jlcpcb-jlc2313, board-shape))
+  set-board(centaur-board)
   set-rules(ocdb/manufacturers/rules/jlcpcb-rules)
 
 ; Input stage 
