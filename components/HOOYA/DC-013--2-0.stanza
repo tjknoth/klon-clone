@@ -1,0 +1,140 @@
+; This file is generated based on the parts database query below:")
+;   database-part(["manufacturer" => "HOOYA", "mpn" => "DC-013Φ2.0"])
+#use-added-syntax(jitx)
+defpackage components/HOOYA/DC-013--2-0 :
+  import core
+  import jitx
+  import jitx/commands
+
+
+pcb-pad capsule-th-pad :
+  name = "capsule-th-pad"
+  type = TH
+  shape = Capsule(4.0, 1.524, loc(0.0, 0.0))
+  layer(SolderMask(Top)) = Capsule(4.102, 1.626, loc(0.0, 0.0))
+  layer(SolderMask(Bottom)) = Capsule(4.102, 1.626, loc(0.0, 0.0))
+  layer(Cutout()) = Capsule(3.0, 0.8, loc(0.0, 0.0))
+
+pcb-landpattern lp :
+  pad p[2] : capsule-th-pad at loc(4.525, 0.900, 270.000) on Top
+  pad p[3] : capsule-th-pad at loc(-0.075, -4.800, 180.000) on Top
+  pad p[5] : capsule-th-pad at loc(-0.075, 5.600, 180.000) on Top
+
+  layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 0.5, W, loc(-0.750, 7.306), "", TrueTypeFont, false, false)
+  layer(Finish(Top)) = Text(">VALUE", 0.5, W, loc(-0.750, 6.306), "", TrueTypeFont, false, false)
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Point(1.750, -5.600)
+    Point(4.375, -5.600)
+    Point(4.375, -1.320)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Point(-2.260, 5.300)
+    Point(-4.525, 5.300)
+    Point(-4.525, -5.600)
+    Point(-1.900, -5.600)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Point(4.375, 3.119)
+    Point(4.375, 5.300)
+    Point(2.110, 5.300)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Arc(-0.015, 0.600, 3.200, 0.0, -360.000)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Arc(-0.015, 0.600, 1.524, 0.0, -360.000)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Arc(-0.015, 0.600, 0.762, 0.0, -360.000)])
+  layer(Finish(Top)) = Polyline(0.060, [
+    Arc(4.725, 5.800, 0.030, 0.0, -360.000)])
+  layer(Finish(Top)) = PolygonWithArcs([
+    Arc(-0.015, 0.600, 3.323, 270.000, -90.000)
+    Arc(-0.015, 0.600, 3.323, 180.000, -90.000)
+    Arc(-0.015, 0.600, 3.323, 90.000, -90.000)
+    Arc(-0.015, 0.600, 3.323, 0.0, -16.167)
+    Arc(3.055, -0.292, 0.127, 344.476, -74.476)
+    Arc(3.055, -0.292, 0.127, 270.000, -90.000)
+    Arc(3.055, -0.292, 0.127, 180.000, -16.808)
+    Arc(-0.015, 0.600, 3.069, 343.831, 16.169)
+    Arc(-0.015, 0.600, 3.069, 0.0, 90.000)
+    Arc(-0.015, 0.600, 3.069, 90.000, 90.000)
+    Arc(-0.015, 0.600, 3.069, 180.000, 90.000)
+    Arc(-0.015, 0.600, 3.069, 270.000, 68.908)
+    Arc(2.968, -0.550, 0.127, 159.336, -69.336)
+    Arc(2.968, -0.550, 0.127, 90.000, -90.000)
+    Arc(2.968, -0.550, 0.127, 9.99999999748979e-05, -21.512)
+    Arc(-0.015, 0.600, 3.323, 338.910, -68.910)])
+  layer(Finish(Top)) = PolygonWithArcs([
+    Arc(-0.015, 0.600, 0.636, 10.572, -19.898)
+    Arc(0.738, 0.476, 0.127, 170.677, 180.000)
+    Arc(-0.015, 0.600, 0.890, 350.675, 19.899)
+    Arc(0.735, 0.739, 0.127, 10.661, 179.836)])
+  layer(Courtyard(Top)) = Rectangle(9.050, 11.200)
+
+pcb-symbol sym-DC-013--2_0 :
+  pin p[2] at Point(0.0, 0.0) with :
+    direction = Right
+    length = 5.080
+    number-size = 1.000
+    name-size = 1.000
+  pin p[3] at Point(0.0, -2.540) with :
+    direction = Right
+    length = 5.080
+    number-size = 1.000
+    name-size = 1.000
+  pin p[5] at Point(0.0, 2.540) with :
+    direction = Right
+    length = 5.080
+    number-size = 1.000
+    name-size = 1.000
+
+  layer("value") = Text(">VALUE", 0.7056, C, loc(0.0, 4.556), "", TrueTypeFont, false, false)
+  layer("reference") = Text(">REF", 0.7056, C, loc(0.0, 5.556), "", TrueTypeFont, false, false)
+  layer("foreground") = Rectangle(1.016, 3.048, loc(-2.032, 2.540))
+  layer("foreground") = Polyline(0.254, [
+    Point(-4.318, -2.540)
+    Point(-4.064, -1.270)])
+  layer("foreground") = Polyline(0.254, [
+    Point(0.0, 0.0)
+    Point(-4.318, 0.0)
+    Point(-4.318, -2.540)
+    Point(-4.572, -1.270)])
+  layer("foreground") = Polyline(0.254, [
+    Point(0.0, -2.540)
+    Point(-7.366, -2.540)
+    Point(-7.874, -1.524)
+    Point(-8.382, -2.540)])
+  layer("foreground") = Polyline(0.254, [
+    Point(-2.540, 1.524)
+    Point(-7.620, 1.524)])
+  layer("foreground") = Polyline(0.254, [
+    Point(-2.540, 3.556)
+    Point(-7.620, 3.556)])
+  layer("foreground") = Polyline(0.254, [
+    Point(0.0, 2.540)
+    Point(-1.524, 2.540)])
+  layer("foreground") = Polyline(0.254, [
+    Arc(-7.620, 2.540, 1.016, 90.000, -180.000)])
+
+public pcb-component component :
+  name = "C2851179"
+  description = " Plugin  AC/DC Power Connectors ROHS"
+  manufacturer = "HOOYA"
+  mpn = "DC-013Φ2.0"
+  datasheet = "https://datasheet.lcsc.com/lcsc/2207051802_HOOYA-DC-013-2-0_C2851179.pdf"
+  reference-prefix = "J"
+  pin-properties :
+    [pin:Ref | pads:Ref ... | side:Dir | electrical-type:String | bank:Int]
+    [p[2] | p[2] | Right | "unspecified" | 0]
+    [p[3] | p[3] | Right | "unspecified" | 0]
+    [p[5] | p[5] | Right | "unspecified" | 0]
+
+  assign-landpattern(lp)
+  assign-symbol(sym-DC-013--2_0)
+
+  property(self.category) = "connector"
+  property(self.manufacturer_aliases) = ["HOOYA"]
+  property(self.mpn_aliases) = ["DC-013Φ2.0"]
+  property(self.reference_prefix) = "J"
+  property(self.trust) = "low"
+  property(self.x) = 9.050
+  property(self.y) = 11.200
+  property(self.area) = 101.360
+  property(self.case) = "Plugin"
+
