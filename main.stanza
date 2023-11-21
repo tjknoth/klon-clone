@@ -552,14 +552,14 @@ pcb-module centaur :
   inst in-jack-msg-mid : header-label("plug")
   place(in-jack-msg-mid) at loc(-32.3, -0.85) on Top
   ; germanium diode pins 
-  ;inst d2A-msg : header-label("A")
-  ;place(d2A-msg) at loc(-18.2, 3.85) on Top
-  ;inst d2K-msg : header-label("K")
-  ;place(d2K-msg) at loc(-18.2, 1.2) on Top
-  ;inst d3A-msg : header-label("A")
-  ;place(d3A-msg) at loc(-9.3, 1.2) on Top
-  ;inst d3K-msg : header-label("K")
-  ;place(d3K-msg) at loc(-9.3, 3.85) on Top
+  inst d2A-msg : header-label("A")
+  place(d2A-msg) at loc(-6.5, 9.0) on Top
+  inst d2K-msg : header-label("K")
+  place(d2K-msg) at loc(-9.0, 9.0) on Top
+  inst d3A-msg : header-label("A")
+  place(d3A-msg) at loc(-9.0, 17.0) on Top
+  inst d3K-msg : header-label("K")
+  place(d3K-msg) at loc(-6.5, 17.0) on Top
   ; Output jack pin labels
   inst out-jack-msg-base : header-label("sleeve")
   place(out-jack-msg-base) at loc(31.0, 4.00) on Top
