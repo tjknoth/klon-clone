@@ -132,13 +132,7 @@ pcb-module gain :
   pin opamp-pos
   pin opamp-out
 
-  ; TODO: these are 10k! need the right one
-  ; TODO: what's the deal with gain-a? connected to constant power supply
-  ;inst rv-gain-a : database-part(["mpn" => "RK1631110U1Q", "manufacturer" => "ALPSALPINE"]) 
-  ;inst rv-gain : database-part(["mpn" => "RK16312A0B85", "manufacturer" => "ALPSALPINE"]) 
-  ;inst rv-gain : database-part(["mpn" => "RK16312A0BKR", "manufacturer" => "ALPSALPINE"])
   inst rv-gain : components/ALPSALPINE/RK16312A0BKR/component
-  ;reference-designator(rv-gain) = "rv-gain"
 
   inst r5 : chip-resistor(5.1e3)
   reference-designator(r5) = "r5"
@@ -158,10 +152,7 @@ pcb-module gain :
   reference-designator(r12) = "r12"
   inst r13 : chip-resistor(1.0e3)
   reference-designator(r13) = "r13"
-  ; where is r14?
-  ; This is a placeholder to prevent off-by-one in the schematic!
-  ; not connected to anything
-  ;inst r14 : chip-resistor(100000.0) 
+  ; no r14
   inst r15 : chip-resistor(22.0e3)
   reference-designator(r15) = "r15"
   inst r16 : chip-resistor(47.0e3)
@@ -311,9 +302,8 @@ pcb-module tone :
   inst c14 : c0g-cap(3.9e-9)
   reference-designator(c14) = "c14"
   ; 10k linear taper pot
-  inst rv-tone : components/ALPSALPINE/RK1631110U1Q/component
   ; note: p[1], p[3] are swapped
-  ;reference-designator(rv-tone) = "rv-tone"
+  inst rv-tone : components/ALPSALPINE/RK1631110U1Q/component
 
   ; nets
   net (in, r21.p[1])
@@ -339,9 +329,6 @@ pcb-module power :
   pin power-n8v6
   pin power-16v2
 
-  ; All instances have reference designators for easier
-  ;  sub-layout sorting
-
   ; capacitors
   inst c17 : x7r-cap(47.0e-6)
   reference-designator(c17) = "c17"
@@ -361,8 +348,6 @@ pcb-module power :
   inst r30 : chip-resistor(27.0e3)
   reference-designator(r30) = "r30"
   ; Zener diode
-  ; A is base of triangle
-  ; C/K is tip
   inst d4 : database-part(["mpn" => "1N4742A", "manufacturer" => "Tak Cheong"])
   reference-designator(d4) = "d4"
   ; Normal diodes
@@ -371,8 +356,6 @@ pcb-module power :
   inst d8 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
   reference-designator(d8) = "d8"
   ; DC power jack
-  ; Pin header as placeholder. p[1] => CON1, p[2] => CON2
-  ;inst j3 : pin-header(2) ;database-part(["mpn" => "DC-060A", "manufacturer" => "HRO Electronics"])
   ; p[5] => +, p[2] batt=> 3, p[3] => gnd
   inst j3 : components/HOOYA/DC-013--2-0/component
   reference-designator(j3) = "J3"
@@ -418,17 +401,17 @@ pcb-module output :
   pin gnd
 
   ; panel mount jack and SPDT switch
+
   ; jack: p1 = tip, p2 = connector, p3 = shoulder
-  ; switch: p1,2 = throws 
   public inst jack : pin-header(3)
-  reference-designator(jack) = "OUTPUT"
+
   ; sw1: p[1] => off, p[2] => on, p[3] => out 
   inst sw1 : pin-header(3)
-  reference-designator(sw1) = "SWITCH"
+
   ; audio taper 10k pot
   ; p[1], p[3] are swapped
   inst rv-level : components/ALPSALPINE/RK1631110U1Q/component
-  ;reference-designator(rv-level) = "LEVEL"
+
   ; capacitors and resistors
   inst c15 : x7r-cap(4.7e-6)
   reference-designator(c15) = "c15"
@@ -474,17 +457,14 @@ pcb-module centaur :
   inst power : power
   inst output : output
 
-  ; instantate op-amps
-  ;inst u1 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
+  ; op-amps
   inst u1 : components/STMicroelectronics/TL072IDT/component
   reference-designator(u1) = "U1"
   inst u2 : components/STMicroelectronics/TL072IDT/component
   reference-designator(u2) = "U2"
-  ;inst u2 : database-part(["mpn" => "TL072IDT", "manufacturer" => "STMicroelectronics"])
 
   ; net 9v op-amp
   net (u1.VCC+, power.power-9v)
-  ;net (u1.VCC-, gnd)
   net (u1.IN1+, input.opamp-pos)
   net (u1.IN1-, input.opamp-neg)
   net (u1.OUT1, input.opamp-out)
