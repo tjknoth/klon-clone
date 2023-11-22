@@ -501,7 +501,7 @@ pcb-module centaur :
 
   val power-nets = [VCC4v5, VCC9v, VCCn8v6, VCC16v2]
 
-  ; Apply default net class to all nets
+  ; Apply default net class to all nets that are not connected to a power-net
   val default-net-class = NetClass(`Default, [`min-trace => 0.40])
   for x in all-connected-items(self) do :
     for n in nets(x) do :
@@ -511,8 +511,7 @@ pcb-module centaur :
   ; Even thicker traces for power nets
   ; TODO: this isn't hitting all of them?
   val power-net-class = NetClass(`Power, [`min-trace => 1.20])
-  for n in [VCC4v5, VCC9v, VCCn8v6, VCC16v2] do :
-    property(n.net-class) = power-net-class
+  for n in [VCC4v5, VCCn8v6, VCC16v2] do : property(n.net-class) = power-net-class
 
   ; Add ground plane
   geom(GND) :
@@ -521,8 +520,6 @@ pcb-module centaur :
   ; Add power plane
   geom(VCC9v) :
     copper-pour(LayerIndex(2), isolate = 0.1, rank = 1) = board-shape
-
-
 
   ; Place labels and a few symmetric components
   ;
@@ -568,14 +565,9 @@ pcb-module centaur :
   inst out-msg : header-label("out")
   place(out-msg) at loc(29.0, 17.0) on Top
 
-
-
-
-
-
-; Write the board version on silkscreen
-;inst version-label  : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
-;place(version-label) at loc(0.0, height(board-shape) / 2.0 - 1.0) on Bottom
+  ; Write the board version on silkscreen
+  inst version-label : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
+  place(version-label) at loc(0.0, 0.0 - (height(board-shape) / 2.0 - 1.0)) on Top
 
 ; Set the design name - a directory with this name will be generated under the "designs" directory
 set-current-design("centaur")
