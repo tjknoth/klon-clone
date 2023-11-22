@@ -505,21 +505,21 @@ pcb-module centaur :
   val default-net-class = NetClass(`Default, [`min-trace => 0.40])
   for x in all-connected-items(self) do :
     for n in nets(x) do :
-      if not any?({connected?([_, n])}, power-nets) :
-        property(n.net-class) = default-net-class
+      ;if not any?({connected?([_, n])}, power-nets) :
+      property(n.net-class) = default-net-class
 
   ; Even thicker traces for power nets
   ; TODO: this isn't hitting all of them?
-  val power-net-class = NetClass(`Power, [`min-trace => 1.20])
-  for n in [VCC4v5, VCCn8v6, VCC16v2] do : property(n.net-class) = power-net-class
+  ;val power-net-class = NetClass(`Power, [`min-trace => 1.20])
+  ;for n in [VCC4v5, VCCn8v6, VCC16v2] do : property(n.net-class) = power-net-class
 
   ; Add ground plane
   geom(GND) :
     copper-pour(LayerIndex(1), isolate = 0.1, rank = 1) = board-shape
 
   ; Add power plane
-  geom(VCC9v) :
-    copper-pour(LayerIndex(2), isolate = 0.1, rank = 1) = board-shape
+  ;geom(VCC9v) :
+  ;  copper-pour(LayerIndex(2), isolate = 0.1, rank = 1) = board-shape
 
   ; Place labels and a few symmetric components
   ;
