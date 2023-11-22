@@ -1,7 +1,6 @@
 /jitx-design
 /pending.*dat
 open-components-database/
-parts-db/
 .vscode/
 *.backup-*
 designs/centaur/kicad/
