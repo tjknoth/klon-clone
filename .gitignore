@@ -4,3 +4,5 @@ open-components-database/
 .vscode/
 *.backup-*
 designs/centaur/kicad/
+.slm
+parts-db/

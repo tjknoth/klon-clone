@@ -5,6 +5,7 @@ defpackage components/ALPSALPINE/RK16312A0BKR :
   import core
   import jitx
   import jitx/commands
+  import jitx/emodels
 
 
 pcb-pad circle-th-pad :
@@ -77,24 +78,24 @@ pcb-symbol sym-RK16312A0BKR :
     number-size = 1.0
     name-size = 1.0
 
-  layer("value") = Text(">VALUE", 0.7056, C, loc(0.0, 5.81000762001524), "", TrueTypeFont, false, false)
-  layer("reference") = Text(">REF", 0.7056, C, loc(0.0, 6.81000762001524), "", TrueTypeFont, false, false)
-  layer("foreground") = Polyline(0.254000508001016, [
+  draw("value") = Text(">VALUE", 0.7056, C, loc(0.0, 5.81000762001524), "", TrueTypeFont, false, false)
+  draw("reference") = Text(">REF", 0.7056, C, loc(0.0, 6.81000762001524), "", TrueTypeFont, false, false)
+  draw("foreground") = Polyline(0.254000508001016, [
     Point(-2.54000508001016, 3.55600711201422), 
     Point(2.54000508001016, 3.55600711201422), 
     Point(2.54000508001016, 1.01600203200406), 
     Point(-2.54000508001016, 1.01600203200406), 
     Point(-2.54000508001016, 3.55600711201422)])
-  layer("foreground") = Polyline(0.254000508001016, [Point(0.0, 4.06400812801626), Point(0.0, 5.33401066802134)])
-  layer("foreground") = Polyline(0.254000508001016, [
+  draw("foreground") = Polyline(0.254000508001016, [Point(0.0, 4.06400812801626), Point(0.0, 5.33401066802134)])
+  draw("foreground") = Polyline(0.254000508001016, [
     Point(2.54000508001016, -3.55600711201422), 
     Point(-2.54000508001016, -3.55600711201422), 
     Point(-2.54000508001016, -1.01600203200406), 
     Point(2.54000508001016, -1.01600203200406), 
     Point(2.54000508001016, -3.55600711201422)])
-  layer("foreground") = Polyline(0.254000508001016, [Point(0.0, -4.06400812801626), Point(0.0, -5.33401066802134)])
-  layer("foreground") = Polygon([Point(0.0, 3.55600711201422), Point(-0.508001016002032, 4.8260096520193), Point(0.508001016002032, 4.8260096520193)])
-  layer("foreground") = Polygon([Point(0.0, -3.55600711201422), Point(0.508001016002032, -4.8260096520193), Point(-0.508001016002032, -4.8260096520193)])
+  draw("foreground") = Polyline(0.254000508001016, [Point(0.0, -4.06400812801626), Point(0.0, -5.33401066802134)])
+  draw("foreground") = Polygon([Point(0.0, 3.55600711201422), Point(-0.508001016002032, 4.8260096520193), Point(0.508001016002032, 4.8260096520193)])
+  draw("foreground") = Polygon([Point(0.0, -3.55600711201422), Point(0.508001016002032, -4.8260096520193), Point(-0.508001016002032, -4.8260096520193)])
 
 public pcb-component component :
   name = "C370979"

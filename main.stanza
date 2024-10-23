@@ -3,10 +3,14 @@ defpackage main :
   import core
   import jitx
   import jitx/commands
-  import ocdb/utils/generic-components
-  import ocdb/utils/symbols
-  import ocdb/utils/landpatterns
+  import jitx/emodels
+  import jitx/parts/query-api
+  import jsl
+  ;import ocdb/utils/generic-components
+  ;import ocdb/utils/symbols
+  ;import ocdb/utils/landpatterns
   import helpers
+  import components/misc
 
 ; carl notes:
 ; can try: film capacitor, ptfe capacitor
@@ -52,10 +56,17 @@ pcb-board centaur-board :
 
 
 
-defn c0g-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "C0G"])
+defn c0g-cap (cap) : create-capacitor(
+  capacitance = cap
+  type = "ceramic"
+  temperature-coefficient_code = "C0G"
+) 
 ; TODO: find replacement
-defn x7r-cap (cap) : ceramic-cap(["capacitance" => cap, "temperature-coefficient.code" => "X7R"])
-;defn x7r-cap (cap) : ceramic-cap(cap)
+defn x7r-cap (cap) :  create-capacitor(
+  capacitance = cap
+  type = "ceramic"
+  temperature-coefficient_code = "X7R"
+) 
 
 defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
@@ -65,21 +76,21 @@ defn setup-board () :
 
 ; Input stage 
 pcb-module input :
-  pin gnd
-  pin power-4v5
-  pin power-9v
-  pin out
-  pin opamp-neg
-  pin opamp-pos
-  pin opamp-out
+  port gnd
+  port power-4v5
+  port power-9v
+  port out
+  port opamp-neg
+  port opamp-pos
+  port opamp-out
 
 
   ; Components: input jack header, two resistors and a cap
   public inst jack : pin-header(3)
   reference-designator(jack) = "IN"
-  inst r1 : chip-resistor(10.0e3)
+  inst r1 : create-resistor(resistance = 10.0e3)
   reference-designator(r1) = "r1"
-  inst r2 : chip-resistor(1.0e6)
+  inst r2 : create-resistor(resistance = 1.0e6)
   reference-designator(r2) = "r2"
   inst c1 : c0g-cap(0.1e-6)
   reference-designator(c1) = "c1"
@@ -94,21 +105,21 @@ pcb-module input :
   net (opamp-out, out)
   net (out, opamp-neg)
 
-  symbol(GND) = ground-sym
+  symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = input
   
 
 ; Bypass mode
-pcb-module bypass :
-  pin in
-  pin out
-  pin gnd
+pcb-module bypass-module :
+  port in
+  port out
+  port gnd
 
   inst c2 : x7r-cap(4.7e-6)
   reference-designator(c2) = "c2"
-  inst r3 : chip-resistor(100.0e3)
+  inst r3 : create-resistor(resistance = 100.0e3)
   reference-designator(r3) = "r3"
-  inst r4 : chip-resistor(560.0)
+  inst r4 : create-resistor(resistance = 560.0)
   reference-designator(r4) = "r4"
 
   net (in, c2.p[1])
@@ -117,51 +128,51 @@ pcb-module bypass :
   net (r3.p[1], r4.p[1])
   net (r4.p[2], out)
 
-  symbol(GND) = ground-sym
+  symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = bypass
 
 
 ; opamp gain
 pcb-module gain :
-  pin in
-  pin out
-  pin gnd
-  pin power-4v5
-  pin power-9v 
-  pin opamp-neg
-  pin opamp-pos
-  pin opamp-out
+  port in
+  port out
+  port gnd
+  port power-4v5
+  port power-9v 
+  port opamp-neg
+  port opamp-pos
+  port opamp-out
 
   inst rv-gain : components/ALPSALPINE/RK16312A0BKR/component
 
-  inst r5 : chip-resistor(5.1e3)
+  inst r5 : create-resistor(resistance = 5.1e3)
   reference-designator(r5) = "r5"
-  inst r6 : chip-resistor(10.0e3)
+  inst r6 : create-resistor(resistance = 10.0e3)
   reference-designator(r6) = "r6"
-  inst r7 : chip-resistor(1.5e3)
+  inst r7 : create-resistor(resistance = 1.5e3)
   reference-designator(r7) = "r7"
-  inst r8 : chip-resistor(1.5e3)
+  inst r8 : create-resistor(resistance = 1.5e3)
   reference-designator(r8) = "r8"
-  inst r9 : chip-resistor(1.0e3)
+  inst r9 : create-resistor(resistance = 1.0e3)
   reference-designator(r9) = "r9"
-  inst r10 : chip-resistor(2.0e3)
+  inst r10 : create-resistor(resistance = 2.0e3)
   reference-designator(r10) = "r10"
-  inst r11 : chip-resistor(15.0e3)
+  inst r11 : create-resistor(resistance = 15.0e3)
   reference-designator(r11) = "r11"
-  inst r12 : chip-resistor(422.0e3)
+  inst r12 : create-resistor(resistance = 422.0e3)
   reference-designator(r12) = "r12"
-  inst r13 : chip-resistor(1.0e3)
+  inst r13 : create-resistor(resistance = 1.0e3)
   reference-designator(r13) = "r13"
   ; no r14
-  inst r15 : chip-resistor(22.0e3)
+  inst r15 : create-resistor(resistance = 22.0e3)
   reference-designator(r15) = "r15"
-  inst r16 : chip-resistor(47.0e3)
+  inst r16 : create-resistor(resistance = 47.0e3)
   reference-designator(r16) = "r16"
-  inst r17 : chip-resistor(27.0e3)
+  inst r17 : create-resistor(resistance = 27.0e3)
   reference-designator(r17) = "r17"
-  inst r18 : chip-resistor(12.0e3)
+  inst r18 : create-resistor(resistance = 12.0e3)
   reference-designator(r18) = "r18"
-  inst r19 : chip-resistor(15.0e3)
+  inst r19 : create-resistor(resistance = 15.0e3)
   reference-designator(r19) = "r19"
 
   inst c3 : c0g-cap(0.1e-6)
@@ -247,23 +258,23 @@ pcb-module gain :
 
   net GND (gnd, c16.p[2], d2.p[1])
 
-  symbol(GND) = ground-sym
+  symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = gain
 
 
 ; summing opamp
 pcb-module sum-amp :
-  pin in
-  pin out
-  pin power-n8v6
-  pin power-16v2
-  pin power-4v5
-  pin opamp-neg
-  pin opamp-pos
-  pin opamp-out
+  port in
+  port out
+  port power-n8v6
+  port power-16v2
+  port power-4v5
+  port opamp-neg
+  port opamp-pos
+  port opamp-out
 
   ; components: 1 resistor, 1 cap
-  inst r20 : chip-resistor(392.0e3)
+  inst r20 : create-resistor(resistance = 392.0e3)
   reference-designator(r20) = "r20"
   inst c13 : c0g-cap(820.0e-12)
   reference-designator(c13) = "c13"
@@ -281,23 +292,23 @@ pcb-module sum-amp :
 
 ; tone control
 pcb-module tone :
-  pin in
-  pin out
-  pin power-4v5
-  pin power-16v2
-  pin power-n8v6
-  pin opamp-neg
-  pin opamp-pos
-  pin opamp-out
+  port in
+  port out
+  port power-4v5
+  port power-16v2
+  port power-n8v6
+  port opamp-neg
+  port opamp-pos
+  port opamp-out
 
   ; Components
-  inst r21 : chip-resistor(1.8e3)
+  inst r21 : create-resistor(resistance = 1.8e3)
   reference-designator(r21) = "r21"
-  inst r22 : chip-resistor(100.0e3)
+  inst r22 : create-resistor(resistance = 100.0e3)
   reference-designator(r22) = "r22"
-  inst r23 : chip-resistor(4.7e3)
+  inst r23 : create-resistor(resistance = 4.7e3)
   reference-designator(r23) = "r23"
-  inst r24 : chip-resistor(100.0e3)
+  inst r24 : create-resistor(resistance = 100.0e3)
   reference-designator(r24) = "r24"
   inst c14 : c0g-cap(3.9e-9)
   reference-designator(c14) = "c14"
@@ -322,12 +333,12 @@ pcb-module tone :
   schematic-group(self) = tone
 
 ; power supply
-pcb-module power :
-  pin gnd
-  pin power-9v
-  pin power-4v5
-  pin power-n8v6
-  pin power-16v2
+pcb-module power-mod :
+  port gnd
+  port power-9v
+  port power-4v5
+  port power-n8v6
+  port power-16v2
 
   ; capacitors
   inst c17 : x7r-cap(47.0e-6)
@@ -343,24 +354,23 @@ pcb-module power :
   inst c22 : x7r-cap(1.0e-6)
   reference-designator(c22) = "c22"
   ; resistors
-  inst r29 : chip-resistor(27.0e3)
+  inst r29 : create-resistor(resistance = 27.0e3)
   reference-designator(r29) = "r29"
-  inst r30 : chip-resistor(27.0e3)
+  inst r30 : create-resistor(resistance = 27.0e3)
   reference-designator(r30) = "r30"
   ; Zener diode
-  inst d4 : database-part(["mpn" => "1N4742A", "manufacturer" => "Tak Cheong"])
+  inst d4 : create-part(mpn = "1N4742A", manufacturer = "Tak Cheong")
   reference-designator(d4) = "d4"
   ; Normal diodes
-  inst d7 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
+  inst d7 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay") 
   reference-designator(d7) = "d7"
-  inst d8 : database-part(["mpn" => "1N4001-E3/73", "manufacturer" => "Vishay"]) 
-  reference-designator(d8) = "d8"
+  inst d8 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay") 
   ; DC power jack
   ; p[5] => +, p[2] batt=> 3, p[3] => gnd
   inst j3 : components/HOOYA/DC-013--2-0/component
   reference-designator(j3) = "J3"
   ; Voltage converter 
-  inst u3 : database-part(["mpn" => "MAX1044ESA+T", "manufacturer" => "Analog Devices"])
+  inst u3 : create-part(mpn = "MAX1044ESA+T") ;, "manufacturer" => "Analog Devices"])
   reference-designator(u3) = "U3"
 
   ; Connect power, diode, capacitor c17
@@ -391,14 +401,14 @@ pcb-module power :
 
   net GND (gnd, j3.p[3], d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
 
-  symbol(GND) = ground-sym
+  symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = power-supply
 
 
 pcb-module output :
-  pin gain-in
-  pin bypass-in
-  pin gnd
+  port gain-in
+  port bypass-in
+  port gnd
 
   ; panel mount jack and SPDT switch
 
@@ -415,13 +425,13 @@ pcb-module output :
   ; capacitors and resistors
   inst c15 : x7r-cap(4.7e-6)
   reference-designator(c15) = "c15"
-  inst r25 : chip-resistor(560.0)
+  inst r25 : create-resistor(resistance = 560.0)
   reference-designator(r25) = "r25"
-  inst r243 : chip-resistor(68.0e3)
+  inst r243 : create-resistor(resistance = 68.0e3)
   reference-designator(r243) = "r243"
-  inst r242 : chip-resistor(68.0e3)
+  inst r242 : create-resistor(resistance = 68.0e3)
   reference-designator(r242) = "r242"
-  inst r28 : chip-resistor(100.0e3)
+  inst r28 : create-resistor(resistance = 100.0e3)
   reference-designator(r28) = "r28"
 
   ; nets
@@ -440,21 +450,21 @@ pcb-module output :
 
   net GND (gnd, rv-level.p[1], r28.p[2])
 
-  symbol(GND) = ground-sym
+  symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = output
 
 ; Module to run as a design
 pcb-module centaur :
   ; define some pins/ports
-  pin gnd
+  port gnd
 
   ; instantiate all sub-modules
   inst input : input
   inst gain : gain
-  inst bypass : bypass
+  inst bypass : bypass-module
   inst sum-amp : sum-amp
   inst tone : tone
-  inst power : power
+  inst power : power-mod
   inst output : output
 
   ; op-amps
@@ -491,7 +501,7 @@ pcb-module centaur :
 
   ; net gnds 
   net GND (input.gnd bypass.gnd gain.gnd power.gnd output.gnd, u1.VCC-) 
-  symbol(GND) = ground-sym
+  symbol(GND) = create-symbol(GroundSymbol()) 
 
   ; Net power module to all sub-modules
   net VCC9v (power.power-9v, input.power-9v, gain.power-9v)
@@ -580,9 +590,6 @@ setup-board()
 
 ; Set the top level module (the module to be compile into a schematic and PCB)
 set-main-module(centaur)
-
-; Use any helper function from helpers.stanza here
-; run-check-on-design(centaur)
 
 ; View the results
 view-board()

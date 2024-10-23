@@ -1,0 +1,4 @@
+name = "klon-clone"
+version = "0.1.0"
+[dependencies]
+jsl = { git = "JITX-Inc/jsl", version = "0.8.1" }

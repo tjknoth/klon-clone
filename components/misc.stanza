@@ -1,0 +1,56 @@
+#use-added-syntax(jitx)
+defpackage components/misc :
+  import core
+  import jitx
+  import jitx/commands
+  import jitx/emodels
+  import jitx/parts/query-api
+  import jsl
+
+
+public defn pin-header (n-pin:Int) : pin-header(n-pin, 1, 2.54, 2.54)
+public pcb-component pin-header (n-pin:Int, n-row:Int, pin-pitch:Double, row-pitch:Double) :
+  description = "Generic pin-header"
+  mpn = to-string("%_X%_-pin-header" % [n-pin n-row])
+  if n-row == 1 :
+    pin-properties :
+      [pin:Ref     | pads:Int ...   | side:Dir]
+      for i in 1 through n-pin do :
+        [p[i] | i | Left]
+  else :
+    pin-properties :
+      [pin:Ref     | pads:Int ...   | side:Dir]
+      for i in 1 through n-pin by 2 do :
+        [p[i] | i | Left]
+        [p[i + 1] | (i + 1) | Right]
+
+  val pitch = 2.54
+  val num-cols = n-pin / n-row
+  val body-len = to-double(num-cols) * pitch
+  val body-width = to-double(n-row) * pitch
+  val pkg = Header(
+    num-leads = n-pin,
+    lead-type = TH-Lead(length = typ(2.0), width = typ(0.9)),
+    pad-diam = 1.5,
+    rows = n-row,
+    pitch = pitch
+    package-body = PackageBody(
+      width = typ(body-width),
+      length = typ(body-len),
+      height = typ(5.0) )
+    )
+  val lp = create-landpattern(pkg)
+  assign-landpattern(lp)
+
+  ;assign-landpattern(pin-header-pkg(n-pin, n-row, pin-pitch, row-pitch))
+  assign-symbol(header-sym(n-pin))
+  ;make-box-symbol()
+
+  reference-prefix = "J"
+
+
+pcb-symbol header-sym (w:Int):
+  name = "Crappy Header Symbol"
+  val scale = 2.54
+  for i in 1 through w do:
+    pin p[i] at Point(0.0, scale * to-double(i))

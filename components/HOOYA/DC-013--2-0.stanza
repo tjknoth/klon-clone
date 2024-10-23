@@ -84,32 +84,32 @@ pcb-symbol sym-DC-013--2_0 :
     number-size = 1.000
     name-size = 1.000
 
-  layer("value") = Text(">VALUE", 0.7056, C, loc(0.0, 4.556), "", TrueTypeFont, false, false)
-  layer("reference") = Text(">REF", 0.7056, C, loc(0.0, 5.556), "", TrueTypeFont, false, false)
-  layer("foreground") = Rectangle(1.016, 3.048, loc(-2.032, 2.540))
-  layer("foreground") = Polyline(0.254, [
+  draw("value") = Text(">VALUE", 0.7056, C, loc(0.0, 4.556), "", TrueTypeFont, false, false)
+  draw("reference") = Text(">REF", 0.7056, C, loc(0.0, 5.556), "", TrueTypeFont, false, false)
+  draw("foreground") = Rectangle(1.016, 3.048, loc(-2.032, 2.540))
+  draw("foreground") = Polyline(0.254, [
     Point(-4.318, -2.540)
     Point(-4.064, -1.270)])
-  layer("foreground") = Polyline(0.254, [
+  draw("foreground") = Polyline(0.254, [
     Point(0.0, 0.0)
     Point(-4.318, 0.0)
     Point(-4.318, -2.540)
     Point(-4.572, -1.270)])
-  layer("foreground") = Polyline(0.254, [
+  draw("foreground") = Polyline(0.254, [
     Point(0.0, -2.540)
     Point(-7.366, -2.540)
     Point(-7.874, -1.524)
     Point(-8.382, -2.540)])
-  layer("foreground") = Polyline(0.254, [
+  draw("foreground") = Polyline(0.254, [
     Point(-2.540, 1.524)
     Point(-7.620, 1.524)])
-  layer("foreground") = Polyline(0.254, [
+  draw("foreground") = Polyline(0.254, [
     Point(-2.540, 3.556)
     Point(-7.620, 3.556)])
-  layer("foreground") = Polyline(0.254, [
+  draw("foreground") = Polyline(0.254, [
     Point(0.0, 2.540)
     Point(-1.524, 2.540)])
-  layer("foreground") = Polyline(0.254, [
+  draw("foreground") = Polyline(0.254, [
     Arc(-7.620, 2.540, 1.016, 90.000, -180.000)])
 
 public pcb-component component :

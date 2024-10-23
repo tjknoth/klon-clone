@@ -81,10 +81,10 @@ pcb-symbol sym-TL072IDT :
     number-size = 1.0
     name-size = 1.0
 
-  layer("value") = Text(">VALUE", 0.7056, C, loc(0.0, 5.81000762001524), "", TrueTypeFont, false, false)
-  layer("reference") = Text(">REF", 0.7056, C, loc(0.0, 6.81000762001524), "", TrueTypeFont, false, false)
-  layer("foreground") = Rectangle(20.3200406400813, 12.7000254000508)
-  layer("foreground") = Circle(-8.89001778003556, 5.08001016002032, 0.381000762001524)
+  draw("value") = Text(">VALUE", 0.7056, C, loc(0.0, 5.81000762001524), "", TrueTypeFont, false, false)
+  draw("reference") = Text(">REF", 0.7056, C, loc(0.0, 6.81000762001524), "", TrueTypeFont, false, false)
+  draw("foreground") = Rectangle(20.3200406400813, 12.7000254000508)
+  draw("foreground") = Circle(-8.89001778003556, 5.08001016002032, 0.381000762001524)
 
 public pcb-component component :
   name = "C107646"
