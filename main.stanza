@@ -6,10 +6,6 @@ defpackage main :
   import jitx/emodels
   import jitx/parts/query-api
   import jsl
-  ;import ocdb/utils/generic-components
-  ;import ocdb/utils/symbols
-  ;import ocdb/utils/landpatterns
-  import helpers
   import components/misc
 
 ; carl notes:
@@ -143,7 +139,10 @@ pcb-module gain :
   port opamp-pos
   port opamp-out
 
-  inst rv-gain : components/ALPSALPINE/RK16312A0BKR/component
+  inst rv-gain : components/ALPSALPINE/RK16312A0BKR-footprint/component
+  reference-designator(rv-gain) = "GAIN"
+  instance-status(rv-gain) :
+    bom-status = NotInBOM
 
   inst r5 : create-resistor(resistance = 5.1e3)
   reference-designator(r5) = "r5"
@@ -222,7 +221,7 @@ pcb-module gain :
   net (in, c3.p[1])
   net (c3.p[2], r7.p[1])
   net (r7.p[2], c16.p[1])
-  net (c16.p[2], r19.p[1])
+  net (c16.p[1], r19.p[1])
   net (r19.p[2], out)
   net (c3.p[2], r6.p[1])
   net (c3.p[2], c5.p[1])
@@ -314,7 +313,10 @@ pcb-module tone :
   reference-designator(c14) = "c14"
   ; 10k linear taper pot
   ; note: p[1], p[3] are swapped
-  inst rv-tone : components/ALPSALPINE/RK1631110U1Q/component
+  inst rv-tone : components/ALPSALPINE/RK1631110U1Q-footprint/component
+  reference-designator(rv-tone) = "TONE"
+  instance-status(rv-tone) :
+    bom-status = NotInBOM
 
   ; nets
   net (in, r21.p[1])
@@ -365,6 +367,7 @@ pcb-module power-mod :
   inst d7 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay") 
   reference-designator(d7) = "d7"
   inst d8 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay") 
+  reference-designator(d8) = "d8"
   ; DC power jack
   ; p[5] => +, p[2] batt=> 3, p[3] => gnd
   inst j3 : components/HOOYA/DC-013--2-0/component
@@ -414,13 +417,18 @@ pcb-module output :
 
   ; jack: p1 = tip, p2 = connector, p3 = shoulder
   public inst jack : pin-header(3)
+  reference-designator(jack) = "J2"
 
   ; sw1: p[1] => off, p[2] => on, p[3] => out 
   inst sw1 : pin-header(3)
+  reference-designator(sw1) = "SW1"
 
   ; audio taper 10k pot
   ; p[1], p[3] are swapped
-  inst rv-level : components/ALPSALPINE/RK1631110U1Q/component
+  inst rv-level : components/ALPSALPINE/RK1631110U1Q-footprint/component
+  reference-designator(rv-level) = "LEVEL"
+  instance-status(rv-level) :
+    bom-status = NotInBOM
 
   ; capacitors and resistors
   inst c15 : x7r-cap(4.7e-6)

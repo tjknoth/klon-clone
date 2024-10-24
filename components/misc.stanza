@@ -52,5 +52,6 @@ public pcb-component pin-header (n-pin:Int, n-row:Int, pin-pitch:Double, row-pit
 pcb-symbol header-sym (w:Int):
   name = "Crappy Header Symbol"
   val scale = 2.54
+  draw("reference") = Text(">REF", 0.7056, C, loc(0.0, scale * 1.5), "", TrueTypeFont, false, false)
   for i in 1 through w do:
     pin p[i] at Point(0.0, scale * to-double(i))
