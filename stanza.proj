@@ -8,3 +8,4 @@ package components/STMicroelectronics/TL072IDT defined-in "components/STMicroele
 package components/ALPSALPINE/RK16312A0BKR-footprint defined-in "components/ALPSALPINE/RK16312A0BKR-footprint.stanza"
 package components/ALPSALPINE/RK1631110U1Q-footprint defined-in "components/ALPSALPINE/RK1631110U1Q-footprint.stanza"
 package components/HOOYA/DC-013--2-0 defined-in "components/HOOYA/DC-013--2-0.stanza"
+package components/GANGYUAN/DC-470-2_1GP defined-in "components/GANGYUAN/DC-470-2_1GP.stanza"

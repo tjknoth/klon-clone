@@ -370,16 +370,17 @@ pcb-module power-mod :
   reference-designator(d8) = "d8"
   ; DC power jack
   ; p[5] => +, p[2] batt=> 3, p[3] => gnd
-  inst j3 : components/HOOYA/DC-013--2-0/component
+  ;inst j3 : components/HOOYA/DC-013--2-0/component
+  inst j3 : components/GANGYUAN/DC-470-2_1GP/component
   reference-designator(j3) = "J3"
   ; Voltage converter 
   inst u3 : create-part(mpn = "MAX1044ESA+T") ;, "manufacturer" => "Analog Devices"])
   reference-designator(u3) = "U3"
 
   ; Connect power, diode, capacitor c17
-  net (j3.p[5], d4.K)
-  net (c17.p[2], j3.p[5])
-  net (power-9v, j3.p[5])
+  net (j3.p[1], d4.K)
+  net (c17.p[2], j3.p[1])
+  net (power-9v, j3.p[1])
 
   ; 4v5 sub-circuit
   net (power-9v, r29.p[1])
@@ -402,7 +403,7 @@ pcb-module power-mod :
   net (u3.VOUT, power-n8v6)
   net (u3.VOUT, c19.p[1])
 
-  net GND (gnd, j3.p[3], d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
+  net GND (gnd, j3.p[2], d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
 
   symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = power-supply
@@ -542,46 +543,45 @@ pcb-module centaur :
   ; Place labels and a few symmetric components
   ;
   ; Input/output jacks
-  ; These placements don't actually apply due to PD bug
-  place(input.jack) at loc(-28.8, -1.0) on Top
-  place(output.jack) at loc(28.8, -1.0) on Top
+  place(input.jack) at loc(-28.8, -15.0) on Top
+  place(output.jack) at loc(28.8, -15.0) on Top
   ; Input jack pin labels
   inst in-jack-msg-base : header-label("sleeve")
-  place(in-jack-msg-base) at loc(-31.0, 4.00) on Top
+  place(in-jack-msg-base) at loc(-31.0, -11.00) on Top
   inst in-jack-msg-tip : header-label("tip")
-  place(in-jack-msg-tip) at loc(-32.3, -3.80) on Top
+  place(in-jack-msg-tip) at loc(-32.3, -18.80) on Top
   inst in-jack-msg-mid : header-label("plug")
-  place(in-jack-msg-mid) at loc(-32.3, -0.85) on Top
+  place(in-jack-msg-mid) at loc(-32.3, -15.85) on Top
   ; germanium diode pins 
   inst d2A-msg : header-label("A")
-  place(d2A-msg) at loc(-5.5, 6.0) on Top
+  place(d2A-msg) at loc(-5.5, -9.0) on Top
   inst d2K-msg : header-label("K")
-  place(d2K-msg) at loc(-8.0, 6.0) on Top
+  place(d2K-msg) at loc(-8.0, -9.0) on Top
   inst d3A-msg : header-label("A")
-  place(d3A-msg) at loc(-8.0, 14.0) on Top
+  place(d3A-msg) at loc(-8.0, -1.0) on Top
   inst d3K-msg : header-label("K")
-  place(d3K-msg) at loc(-5.5, 14.0) on Top
+  place(d3K-msg) at loc(-5.5, -1.0) on Top
   ; Output jack pin labels
   inst out-jack-msg-base : header-label("sleeve")
-  place(out-jack-msg-base) at loc(31.0, 4.00) on Top
+  place(out-jack-msg-base) at loc(31.0, -1.00) on Top
   inst out-jack-msg-tip : header-label("tip")
-  place(out-jack-msg-tip) at loc(32.3, -3.80) on Top
+  place(out-jack-msg-tip) at loc(32.3, -18.80) on Top
   inst out-jack-msg-mid : header-label("plug")
-  place(out-jack-msg-mid) at loc(32.3, -0.85) on Top
+  place(out-jack-msg-mid) at loc(32.3, -15.85) on Top
   ; Potentiometer labels
   inst gain-msg : header-label("gain")
-  place(gain-msg) at loc(-21.0, 36.5) on Top
+  place(gain-msg) at loc(-21.0, 21.5) on Top
   inst tone-msg : header-label("tone")
-  place(tone-msg) at loc(0.0, 36.5) on Top
+  place(tone-msg) at loc(0.0, 21.5) on Top
   inst output-msg : header-label("output")
-  place(output-msg) at loc(21.0, 36.5) on Top
+  place(output-msg) at loc(21.0, 21.5) on Top
   ; Switch labels
   inst bypass-msg : header-label("off")
-  place(bypass-msg) at loc(18.0, 17.0) on Top
+  place(bypass-msg) at loc(18.0, 2.0) on Top
   inst on-msg : header-label("on")
-  place(on-msg) at loc(23.5, 19.5) on Top
+  place(on-msg) at loc(23.5, 4.5) on Top
   inst out-msg : header-label("out")
-  place(out-msg) at loc(29.0, 17.0) on Top
+  place(out-msg) at loc(29.0, 2.0) on Top
 
   ; Write the board version on silkscreen
   inst version-label : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
@@ -600,5 +600,5 @@ setup-board()
 set-main-module(centaur)
 
 ; View the results
-view-board()
 view-schematic()
+view-board()

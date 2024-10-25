@@ -1,0 +1,154 @@
+; This file is generated based on the parts database query below:")
+;   database-part(["manufacturer" => "GANGYUAN", "mpn" => "DC-470-2.1GP"])
+#use-added-syntax(jitx)
+defpackage components/GANGYUAN/DC-470-2_1GP :
+  import core
+  import jitx
+  import jitx/commands
+  import ocdb/utils/box-symbol
+
+
+pcb-pad capsule-th-pad :
+  name = "capsule-th-pad"
+  type = TH
+  shape = Capsule(1.5, 3.5, loc(0.0, 0.0))
+  layer(SolderMask(Top)) = Capsule(1.602, 3.602, loc(0.0, 0.0))
+  layer(SolderMask(Bottom)) = Capsule(1.602, 3.602, loc(0.0, 0.0))
+  layer(Cutout()) = Capsule(1.0, 3.0, loc(0.0, 0.0))
+
+pcb-pad capsule-th-pad-1 :
+  name = "capsule-th-pad-1"
+  type = TH
+  shape = Capsule(3.5, 1.5, loc(0.0, 0.0))
+  layer(SolderMask(Top)) = Capsule(3.602, 1.602, loc(0.0, 0.0))
+  layer(SolderMask(Bottom)) = Capsule(3.602, 1.602, loc(0.0, 0.0))
+  layer(Cutout()) = Capsule(3.0, 1.0, loc(0.0, 0.0))
+
+pcb-landpattern lp :
+  pad p[1] : capsule-th-pad at loc(6.533, 0.401) on Top
+  pad p[2] : capsule-th-pad at loc(0.333, 0.401) on Top
+  pad p[3] : capsule-th-pad-1 at loc(3.533, -4.299) on Top
+
+  layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 0.5, W, loc(-0.750, 6.806))
+  layer(CustomLayer("Fab", Top)) = Text(">VALUE", 0.5, W, loc(-0.750, 5.806))
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Point(-3.927, 4.973)
+    Point(6.813, 4.973)
+    Point(6.853, 4.934)
+    Point(6.853, 2.329)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Point(5.506, -4.171)
+    Point(6.853, -4.171)
+    Point(6.853, -1.526)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-3.927, -4.171), Point(1.560, -4.171)])
+  layer(Silkscreen("F-SilkS", Top)) = Polyline(0.254, [
+    Point(-3.927, 4.973)
+    Point(-7.207, 4.973)
+    Point(-7.207, -4.139)
+    Point(-7.175, -4.171)
+    Point(-3.927, -4.171)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-3.927, 4.973), Point(-3.927, -4.171)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(4.963, 4.973), Point(4.963, -4.171)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-3.927, 3.957), Point(4.963, 3.957)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(-3.927, -3.155), Point(4.963, -3.155)])
+  layer(Silkscreen("F-SilkS", Top)) = Line(0.254, [Point(3.185, 3.957), Point(3.185, -3.155)])
+  layer(CustomLayer("Fab", Top)) = Polyline(0.060, [
+    Arc(6.833, 4.852, 0.030, 0.0, -360.000)])
+  layer(CustomLayer("Fab", Top)) = PolygonWithArcs([
+    Point(1.573, -4.049)
+    Point(1.573, -4.289)
+    Point(-7.207, -4.289)
+    Point(-7.327, -4.169)
+    Point(-7.327, 4.971)
+    Point(-7.207, 5.091)
+    Point(6.853, 5.091)
+    Point(6.973, 4.971)
+    Point(6.973, 2.311)
+    Point(6.733, 2.311)
+    Point(6.733, 4.851)
+    Point(-7.087, 4.851)
+    Point(-7.087, -4.049)
+    Point(1.573, -4.049)])
+  layer(Courtyard(Top)) = Rectangle(14.668, 10.200)
+
+  model3d = Model3D("{USER_PROJECT_ROOT}/3d-models/jitx-64d1a7d6b789d8dc4b8631d7.stp",
+    Vec3D(0.0, 0.0, 0.0),
+    Vec3D(1.000, 1.000, 1.000),
+    Vec3D(0.0, 0.0, 0.0),
+    [],
+    )
+
+pcb-symbol sym-DC-470-2_1GP :
+  pin p[1] at Point(2.540, 2.540) with :
+    direction = Right
+    length = 5.080
+    number-size = 1.000
+    name-size = 1.000
+  pin p[2] at Point(2.540, -2.540) with :
+    direction = Right
+    length = 5.080
+    number-size = 1.000
+    name-size = 1.000
+  pin p[3] at Point(2.540, 0.0) with :
+    direction = Right
+    length = 5.080
+    number-size = 1.000
+    name-size = 1.000
+
+  draw("value") = Text(">VALUE", 0.7056, C, loc(0.0, 4.556))
+  draw("reference") = Text(">REF", 0.7056, C, loc(0.0, 5.556))
+  draw("foreground") = Rectangle(1.016, 3.048, loc(0.508, 2.540))
+  draw("foreground") = Polyline(0.254, [
+    Point(2.540, 2.540)
+    Point(1.016, 2.540)])
+  draw("foreground") = Polyline(0.254, [
+    Point(0.0, 3.556)
+    Point(-5.080, 3.556)])
+  draw("foreground") = Polyline(0.254, [
+    Point(0.0, 1.524)
+    Point(-5.080, 1.524)])
+  draw("foreground") = Polyline(0.254, [
+    Point(2.540, -2.540)
+    Point(-4.826, -2.540)
+    Point(-5.334, -1.524)
+    Point(-5.842, -2.540)])
+  draw("foreground") = Polyline(0.254, [
+    Point(2.540, 0.0)
+    Point(-1.778, 0.0)
+    Point(-1.778, -2.540)
+    Point(-2.032, -1.270)])
+  draw("foreground") = Polyline(0.254, [
+    Point(-1.778, -2.540)
+    Point(-1.524, -1.270)])
+  draw("foreground") = Polyline(0.254, [
+    Arc(-5.080, 2.540, 1.016, 90.000, -180.000)])
+
+public pcb-component component :
+  name = "C194407"
+  description = "Shrouded DC Power Receptacle -40℃~+55℃ 2.1mm 6.3mm 500mA 30V Plugin  AC/DC Power Connectors ROHS"
+  manufacturer = "GANGYUAN"
+  mpn = "DC-470-2.1GP"
+  datasheet = "https://datasheet.lcsc.com/lcsc/1810201908_GANGYUAN-DC-470-2-1GP_C194407.pdf"
+  reference-prefix = "J"
+  pin-properties :
+    [pin:Ref | pads:Ref ... | side:Dir | electrical-type:String | bank:Int]
+    [p[1] | p[1] | Right | "unspecified" | 0]
+    [p[2] | p[2] | Right | "unspecified" | 0]
+    [p[3] | p[3] | Right | "unspecified" | 0]
+
+  assign-landpattern(lp)
+  assign-symbol(sym-DC-470-2_1GP)
+
+  property(self.category) = "connector"
+  property(self.manufacturer_aliases) = ["GANGYUAN"]
+  property(self.mpn_aliases) = ["DC-470-2.1GP"]
+  property(self.cofactr_id) = "COM900G1TPH3"
+  property(self.reference_prefix) = "J"
+  property(self.trust) = "low"
+  property(self.x) = 14.668
+  property(self.y) = 10.200
+  property(self.area) = 149.614
+  property(self.case) = "Plugin"
+  property(self.mounting) = "through-hole"
+  property(self.rated-temperature) = Toleranced(7.5, 47.5, 47.5)
+
