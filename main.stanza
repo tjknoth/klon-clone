@@ -418,7 +418,7 @@ pcb-module output :
 
   ; jack: p1 = tip, p2 = connector, p3 = shoulder
   public inst jack : pin-header(3)
-  reference-designator(jack) = "J2"
+  reference-designator(jack) = "OUT"
 
   ; sw1: p[1] => off, p[2] => on, p[3] => out 
   inst sw1 : pin-header(3)
@@ -537,14 +537,14 @@ pcb-module centaur :
     copper-pour(LayerIndex(1), isolate = 0.1, rank = 1) = board-shape
 
   ; Add power plane
-  ;geom(VCC9v) :
-  ;  copper-pour(LayerIndex(2), isolate = 0.1, rank = 1) = board-shape
+  geom(VCC9v) :
+    copper-pour(LayerIndex(2), isolate = 0.1, rank = 1) = board-shape
 
   ; Place labels and a few symmetric components
   ;
   ; Input/output jacks
-  place(input.jack) at loc(-28.8, -15.0) on Top
-  place(output.jack) at loc(28.8, -15.0) on Top
+  place(input.jack) at loc(-28.8, -16.0) on Top
+  place(output.jack) at loc(28.8, -16.0) on Top
   ; Input jack pin labels
   inst in-jack-msg-base : header-label("sleeve")
   place(in-jack-msg-base) at loc(-31.0, -11.00) on Top
@@ -563,7 +563,7 @@ pcb-module centaur :
   place(d3K-msg) at loc(-5.5, -1.0) on Top
   ; Output jack pin labels
   inst out-jack-msg-base : header-label("sleeve")
-  place(out-jack-msg-base) at loc(31.0, -1.00) on Top
+  place(out-jack-msg-base) at loc(31.0, -11.00) on Top
   inst out-jack-msg-tip : header-label("tip")
   place(out-jack-msg-tip) at loc(32.3, -18.80) on Top
   inst out-jack-msg-mid : header-label("plug")
@@ -577,11 +577,11 @@ pcb-module centaur :
   place(output-msg) at loc(21.0, 21.5) on Top
   ; Switch labels
   inst bypass-msg : header-label("off")
-  place(bypass-msg) at loc(18.0, 2.0) on Top
+  place(bypass-msg) at loc(20.0, 4.5) on Top
   inst on-msg : header-label("on")
   place(on-msg) at loc(23.5, 4.5) on Top
   inst out-msg : header-label("out")
-  place(out-msg) at loc(29.0, 2.0) on Top
+  place(out-msg) at loc(27.0, 4.5) on Top
 
   ; Write the board version on silkscreen
   inst version-label : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
