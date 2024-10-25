@@ -904,6 +904,22 @@
     {"operation":"via-drop","via-details":[{"via":{"id":"GWNA5HvXZgsqKaJJXHeKrF/2JFHBXgzQckijfgLZeiJEH","def-name":"default-via","def-layers":[0,3],"origin":"GWNA5HvXZgsqKaJJXHeKrF/3pghUdT5EHqSsSJu8LXgmL","route-layer":0,"relative":{"x":-7.7504632443054775e-16,"y":-0.83986221811340034}},"route":[{"id":"FrTPXtsCfWkVTtyezAJ3f9","layer":0,"start":"GWNA5HvXZgsqKaJJXHeKrF/3pghUdT5EHqSsSJu8LXgmL","end":"GWNA5HvXZgsqKaJJXHeKrF/2JFHBXgzQckijfgLZeiJEH","sketch":{"start":{"reference-side":"top","position":{"x":-11.189958763441119,"y":-6.7587345170447932}},"turns":[],"end":{"reference-side":"top","position":{"x":-11.189958763441119,"y":-6.3287335170447934}}},"join":true}]}]},
     {"operation":"via-drop","via-details":[{"via":{"id":"3ga7fEsrhSassoujnmbZNH/2bm4AqZPGVx9dBv9Kc3a7t","def-name":"default-via","def-layers":[0,3],"origin":"3ga7fEsrhSassoujnmbZNH/DLySQJSXU7SEk9AGndPrPw","route-layer":0,"relative":{"x":-4.4408920985006262e-16,"y":2.3629009999999986}},"route":[{"id":"8uJenFjaY8jn3n2TeTiG6D","layer":0,"start":"3ga7fEsrhSassoujnmbZNH/DLySQJSXU7SEk9AGndPrPw","end":"3ga7fEsrhSassoujnmbZNH/2bm4AqZPGVx9dBv9Kc3a7t","sketch":{"start":{"reference-side":"top","position":{"x":-10.76405255365443,"y":-3.8451451164215387}},"turns":[],"end":{"reference-side":"top","position":{"x":-11.85695355365443,"y":-3.8451451164215391}}},"join":true}]}]},
     {"operation":"route","request":{"layer":0,"pads":["E3hidJSUhMgvBSizMbEKsM/4sWTQMF2a5a1PcqbfhFUbd","FXbVABLrxUHBTZfTbL2tLh/56UfooN26ZidUnJ2FqtW24","GWNA5HvXZgsqKaJJXHeKrF/DDBWvFUjzzQ4GoPE9wZATK"]},"routes":[{"id":"E6ZXYcXEvhzxfXWK3SupFj","layer":0,"start":"E3hidJSUhMgvBSizMbEKsM/4sWTQMF2a5a1PcqbfhFUbd","end":"GWNA5HvXZgsqKaJJXHeKrF/DDBWvFUjzzQ4GoPE9wZATK","sketch":{"start":{"reference-side":"top","position":{"x":-11.401084655088139,"y":-9.2252234684317873}},"turns":[],"end":{"reference-side":"top","position":{"x":-11.189958763441119,"y":-7.5784569532715942}}}}]},
-    {"operation":"route-modify","modify":[{"id":"E6ZXYcXEvhzxfXWK3SupFj","configure":{"trace-width":0.4}}]}
+    {"operation":"route-modify","modify":[{"id":"E6ZXYcXEvhzxfXWK3SupFj","configure":{"trace-width":0.4}}]},
+    {"operation":"route-modify","modify":[{"id":"G2hs2G4w5LQGrzUhBfhfzc","configure":{"trace-width":1.2}}]},
+    {"operation":"route-modify","modify":[{"id":"GQNcTNG9Sx31aCbKKANfYR","configure":{"trace-width":1.2}}]},
+    {"operation":"route-modify","modify":[{"id":"FjcygQtJUQ5br7MR2EpkCD","configure":{"trace-width":1.2}}]},
+    {"operation":"unroute","delete":{"layer":3,"routes":["FjcygQtJUQ5br7MR2EpkCD"]}},
+    {"operation":"via-delete","delete":{"vias":["5cyASHmER92YwquKvCa8yg/FxNby2jrr2wRYproTQL3oR"]}},
+    {"operation":"unroute","delete":{"routes":["78u8RdfQy22At6LAz7ZCEr"]}},
+    {"operation":"route-modify","modify":[{"id":"CVCqU6ZcCCX1aXqgeZ44su","configure":{"trace-width":1.2}}]},
+    {"operation":"route-modify","modify":[{"id":"AQGw63aq19VioQBiD6Jygj","configure":{"trace-width":1.2}}]},
+    {"operation":"route-modify","modify":[{"id":"EAmHtTV46JMXiopRDD3QZh","configure":{"trace-width":1.2}}]},
+    {"operation":"route-modify","modify":[{"id":"AQGw63aq19VioQBiD6Jygj","configure":{"origin-target":"fit","destination-target":"fit"}}]},
+    {"operation":"route-modify","modify":[{"id":"AQGw63aq19VioQBiD6Jygj","configure":{"neckdown":true}}]},
+    {"operation":"unroute","delete":{"layer":3,"routes":["AQGw63aq19VioQBiD6Jygj"]}},
+    {"operation":"unroute","delete":{"layer":3,"routes":["G2hs2G4w5LQGrzUhBfhfzc"]}},
+    {"operation":"unroute","delete":{"layer":3,"routes":["GQNcTNG9Sx31aCbKKANfYR"]}},
+    {"operation":"unroute","delete":{"layer":3,"routes":["EAmHtTV46JMXiopRDD3QZh"]}},
+    {"operation":"unroute","delete":{"layer":3,"routes":["CVCqU6ZcCCX1aXqgeZ44su"]}}
   ]
 }
