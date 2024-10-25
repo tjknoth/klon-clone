@@ -18,11 +18,11 @@ pcb-pad circle-th-pad :
 
 pcb-landpattern lp :
   pad p[1] : circle-th-pad at loc(-6.43350000000009, -5.00099999999998) on Top
-  pad p[2] : circle-th-pad at loc(-6.43350000000009, -0.000999999999976353) on Top
+  pad p[6] : circle-th-pad at loc(-6.43350000000009, -0.000999999999976353) on Top
   pad p[3] : circle-th-pad at loc(-6.43350000000009, 4.99900000000002) on Top
   pad p[4] : circle-th-pad at loc(-11.4335000000001, -5.00099999999998) on Top
   pad p[5] : circle-th-pad at loc(-11.4335000000001, -0.000999999999976353) on Top
-  pad p[6] : circle-th-pad at loc(-11.4335000000001, 4.99900000000002) on Top
+  pad p[2] : circle-th-pad at loc(-11.4335000000001, 4.99900000000002) on Top
 
   layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 1.0, W, loc(-6.4, 9.70659999999998), "", TrueTypeFont, false, false)
   layer(Finish(Top)) = Text(">VALUE", 1.0, W, loc(-6.4, 8.70659999999998), "", TrueTypeFont, false, false)

@@ -16,10 +16,15 @@ pcb-pad circle-th-pad :
   layer(SolderMask(Bottom)) = Circle(1.5)
   layer(Cutout()) = Circle(0.65)
 
-pcb-landpattern lp :
-  pad p[1] : circle-th-pad at loc(-11.2394999999999, -5.0005000000001) on Top
-  pad p[2] : circle-th-pad at loc(-11.2394999999999, -0.000500000000101863) on Top
-  pad p[3] : circle-th-pad at loc(-11.2394999999999, 4.9994999999999) on Top
+pcb-landpattern lp (swap?:True|False):
+  if swap? :
+    pad p[1] : circle-th-pad at loc(-11.2394999999999, -0.000500000000101863) on Top
+    pad p[2] : circle-th-pad at loc(-11.2394999999999, -5.0005000000001) on Top
+    pad p[3] : circle-th-pad at loc(-11.2394999999999, 4.9994999999999) on Top
+  else :
+    pad p[1] : circle-th-pad at loc(-11.2394999999999, -5.0005000000001) on Top
+    pad p[2] : circle-th-pad at loc(-11.2394999999999, -0.000500000000101863) on Top
+    pad p[3] : circle-th-pad at loc(-11.2394999999999, 4.9994999999999) on Top
 
   layer(Silkscreen("F-SilkS", Top)) = Text(">REF", 1.0, W, loc(-11.2, 9.70709999999997), "", TrueTypeFont, false, false)
   layer(Finish(Top)) = Text(">VALUE", 1.0, W, loc(-11.2, 8.70709999999997), "", TrueTypeFont, false, false)
@@ -66,7 +71,7 @@ pcb-symbol sym-RK1631110U1Q :
     Point(-2.54000508001016, 1.01600203200406)])
   draw("foreground") = Polygon([Point(0.0, 1.01600203200406), Point(-0.508001016002032, 2.28600457200914), Point(0.508001016002032, 2.28600457200914)])
 
-public pcb-component component :
+public pcb-component component (-- swap?:True|False) :
   name = "C370978"
   description = "±20% 100mW 10kΩ Plugin  Variable Resistors/Potentiometers ROHS"
   manufacturer = "ALPSALPINE"
@@ -79,7 +84,7 @@ public pcb-component component :
     [p[2] | p[2] | Up | "input" | 0]
     [p[1] | p[1] | Right | "input" | 0]
 
-  assign-landpattern(lp)
+  assign-landpattern(lp(swap?))
   assign-symbol(sym-RK1631110U1Q)
 
   property(self.category) = "resistor"
