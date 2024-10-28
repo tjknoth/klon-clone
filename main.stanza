@@ -2,55 +2,13 @@
 defpackage main :
   import core
   import jitx
+  import board
   import jitx/commands
   import jitx/emodels
   import jitx/parts/query-api
   import jsl
   import components/misc
-
-; carl notes:
-; can try: film capacitor, ptfe capacitor
-
-pcb-via default-via :
-  name = "default-via"
-  start = LayerIndex(0, Top)
-  stop = LayerIndex(0, Bottom)
-  diameter = 0.46
-  hole-diameter = 0.2
-  type = LaserDrill ; is this right?
-
-pcb-material copper :
-  type = Conductor
-  name = "Copper"
-  
-pcb-material core :
-  type = Dielectric
-  dielectric-coefficient = 4.26
-  name = "PR4 Core"
-
-pcb-material soldermask :
-  type = Dielectric
-  dielectric-coefficient = 3.9
-  name = "Taiyo BSN4000"
-
-public pcb-stackup jlcpcb-jlc-2layer:
-  name = "JLCPCB 2-layer 1.6mm"
-  layer(0.019, soldermask) ; 0.5mil over conductor
-  layer(0.035, copper) 
-  layer(1.2650, core)
-  layer(0.035, copper) 
-  layer(0.019, soldermask) ; 0.5mil over conductor
-
-; Define the shape/size of the board
-val board-shape = RoundedRectangle(68.5, 93.5, 0.25)
-
-pcb-board centaur-board :
-  stackup = ocdb/manufacturers/stackups/jlcpcb-jlc2313
-  boundary = board-shape
-  signal-boundary = board-shape
-  vias = [default-via]
-
-
+  import mechanical/MountingHoles
 
 defn c0g-cap (cap) : create-capacitor(
   capacitance = cap
@@ -69,6 +27,26 @@ defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 defn setup-board () :
   set-board(centaur-board)
   set-rules(ocdb/manufacturers/rules/jlcpcb-rules)
+
+; Expand traces:
+; By default width is 0.40
+; Power nets get 1.2
+; Parameter is a set of power pins or nets
+; all-connected-items does not recursively descend into children so we do this on a
+;   module-by-module basis
+defn fatten (power-pins:Tuple) :
+  inside pcb-module :
+    ; Apply default net class to all nets that are not connected to a power-net
+    val default-net-class = NetClass(`Default, [`min-trace => 0.40])
+    val power-net-class = NetClass(`Default, [`min-trace => 1.20])
+    for x in all-connected-items(self) do :
+      for n in nets(x) do :
+        if any?({connected?([_, n])}, power-pins) :
+          property(n.net-class) = power-net-class
+        else :
+          property(n.net-class) = default-net-class
+
+
 
 ; Input stage 
 pcb-module input :
@@ -103,6 +81,7 @@ pcb-module input :
 
   symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = input
+  fatten([power-4v5, power-9v])
   
 
 ; Bypass mode
@@ -126,6 +105,7 @@ pcb-module bypass-module :
 
   symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = bypass
+  fatten([])
 
 
 ; opamp gain
@@ -265,6 +245,7 @@ pcb-module gain :
 
   symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = gain
+  fatten([power-4v5, power-9v])
 
 
 ; summing opamp
@@ -294,6 +275,7 @@ pcb-module sum-amp :
   net (opamp-out, out)
 
   schematic-group(self) = sum-amp
+  fatten([power-4v5, power-n8v6, power-16v2])
 
 ; tone control
 pcb-module tone :
@@ -339,6 +321,7 @@ pcb-module tone :
   net (r24.p[2], out)
 
   schematic-group(self) = tone
+  fatten([power-4v5, power-16v2, power-n8v6])
 
 ; power supply
 pcb-module power-mod :
@@ -413,6 +396,7 @@ pcb-module power-mod :
 
   symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = power-supply
+  fatten([power-9v, power-4v5, power-16v2, power-n8v6])
 
 
 pcb-module output :
@@ -467,6 +451,7 @@ pcb-module output :
 
   symbol(GND) = create-symbol(GroundSymbol()) 
   schematic-group(self) = output
+  fatten([])
 
 ; Module to run as a design
 pcb-module centaur :
@@ -526,13 +511,6 @@ pcb-module centaur :
 
   val power-nets = [VCC4v5, VCC9v, VCCn8v6, VCC16v2]
 
-  ; Apply default net class to all nets that are not connected to a power-net
-  val default-net-class = NetClass(`Default, [`min-trace => 0.40])
-  for x in all-connected-items(self) do :
-    for n in nets(x) do :
-      ;if not any?({connected?([_, n])}, power-nets) :
-      property(n.net-class) = default-net-class
-
   ; Add ground plane
   geom(GND) :
     copper-pour(LayerIndex(1), isolate = 0.1, rank = 1) = board-shape
@@ -587,6 +565,15 @@ pcb-module centaur :
   ; Write the board version on silkscreen
   inst version-label : ocdb/artwork/board-text/version-silkscreen("Version 1.0")
   place(version-label) at loc(0.0, 0.0 - (height(board-shape) / 2.0 - 1.0)) on Top
+  fatten(power-nets)
+
+  within (x, y) = add-mounting-holes(
+    board-shape
+  ) :
+    if [x, y] == [1, 0] : None()
+    else : One $ MountingHole(
+      Circle(1.0) ; TODO : what size?
+    )
 
 ; Set the design name - a directory with this name will be generated under the "designs" directory
 set-current-design("centaur")
