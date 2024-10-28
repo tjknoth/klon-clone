@@ -1,0 +1,32 @@
+#use-added-syntax(jitx)
+defpackage transform :
+  import core
+  import jitx
+  import jitx/commands
+  import jsl/design/introspection
+  import jsl/symbols
+
+public defn expand-surface-mount-symbol (go:(LandPattern) -> LandPattern, cmp:Instantiable) -> Instantiable :
+  within transform-component(cmp) :
+    inside pcb-component :
+      val lp = /landpattern(self)
+      val lp* = go(lp) ; macros don't allow function applications on rhs of landpattern statement
+      ;override landpattern = lp*
+      assign-landpattern(lp*)
+      false
+
+defn expand-pad (p:Pad) : p ; TODO
+    
+
+;public defn expand-two-pin-smd (lp:LandPattern) -> LandPattern :
+pcb-landpattern expand-two-pin-smd (lp:LandPattern) :
+  val ps = pads(lp)
+  if length(ps) != 2 : throw(Exception("Not a two-pad package"))
+  val pad* = expand-pad(ps[0])
+  ;pcb-landpattern lp2 :
+  for p in pads(lp) :
+    make-package-pad(ref(p), pad*, pose(p), side(p))
+  for l in layers(lp) :
+    make-layer(specifier(l), shape(l))
+  ;lp2
+ 

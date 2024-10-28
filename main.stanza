@@ -3,6 +3,7 @@ defpackage main :
   import core
   import jitx
   import board
+  import transform
   import jitx/commands
   import jitx/emodels
   import jitx/parts/query-api
@@ -10,12 +11,14 @@ defpackage main :
   import components/misc
   import mechanical/MountingHoles
 
-defn c0g-cap (cap) : create-capacitor(
-  capacitance = cap
-  type = "ceramic"
-  temperature-coefficient_code = "C0G"
-  case = valid-smd-pkgs("0603")
-) 
+defn c0g-cap (cap) : 
+  val comp = create-capacitor(
+    capacitance = cap
+    type = "ceramic"
+    temperature-coefficient_code = "C0G"
+    case = valid-smd-pkgs("0603")
+  )
+  within lp = expand-surface-mount-symbol(comp) : lp ; identity fn for now
 ; TODO: find replacement
 defn x7r-cap (cap) :  create-capacitor(
   capacitance = cap
@@ -599,4 +602,4 @@ set-main-module(centaur)
 ; View the results
 view-schematic()
 view-board()
-view-design-explorer()
+;view-design-explorer()
