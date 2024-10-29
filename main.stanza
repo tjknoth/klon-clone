@@ -12,41 +12,37 @@ defpackage main :
   import mechanical/MountingHoles
   import debug/test-points
 
-defn expand (go:() -> Instantiable) :
-  val comp = go()
-  within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
+val big-cases = to-tuple $
+  cat(["Radial"], valid-smd-pkgs("0805"))
 
 ; wrapper for generating x7r capacitors
-defn c0g-cap (cap) :
-  within expand() :
-    create-capacitor(
-      capacitance = cap
-      type = "ceramic"
-      temperature-coefficient_code = "C0G"
-      case = valid-smd-pkgs("0603")
-    )
+defn film-cap (cap) :
+  create-capacitor(
+    capacitance = cap
+    type = "film"
+    case = big-cases
+  )
 
-; wrapper for generating x7r capacitors
-defn x7r-cap (cap) :
-  within expand() :
-    create-capacitor(
-      capacitance = cap
-      type = "ceramic"
-      temperature-coefficient_code = "X7R"
-      case = valid-smd-pkgs("0603")
-    )
+defn smallish-cap (cap) :
+  create-capacitor(
+    capacitance = cap
+    ;type = "film"
+    ;case = "Radial" 
+    ;type = "ceramic"
+    temperature-coefficient_code = "X7R"
+    case = valid-smd-pkgs("0603")
+  )
 
 ; wrapper for generating resistors
 defn resistor (resistance) :
-  within expand() :
-    create-resistor(
-      resistance = resistance
-      case = valid-smd-pkgs("0603")
-    )
+  create-resistor(
+    resistance = resistance
+    case = valid-smd-pkgs("0805")
+  )
 
 ; small decoupling/bypass cap
 defn decoupling-cap () :
-  c0g-cap(0.1e-6)
+  film-cap(0.1e-6)
 
 defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
@@ -73,7 +69,6 @@ defn fatten (power-pins:Tuple) :
           property(n.net-class) = default-net-class
 
 
-
 ; Input stage
 pcb-module input :
   port gnd
@@ -92,7 +87,7 @@ pcb-module input :
   reference-designator(r1) = "r1"
   inst r2 : resistor(1.0e6)
   reference-designator(r2) = "r2"
-  inst c1 : c0g-cap(0.1e-6)
+  inst c1 : film-cap(0.1e-6)
   reference-designator(c1) = "c1"
 
   net (jack.p[3], r1.p[1])
@@ -116,7 +111,7 @@ pcb-module bypass-module :
   port out
   port gnd
 
-  inst c2 : x7r-cap(4.7e-6)
+  inst c2 : film-cap(4.7e-6)
   reference-designator(c2) = "c2"
   inst r3 : resistor(100.0e3)
   reference-designator(r3) = "r3"
@@ -186,28 +181,28 @@ pcb-module gain :
   inst r19 : resistor(15.0e3)
   reference-designator(r19) = "r19"
 
-  inst c3 : c0g-cap(0.1e-6)
+  inst c3 : film-cap(0.1e-6)
   reference-designator(c3) = "c3"
-  inst c4 : c0g-cap(68.0e-9)
+  inst c4 : film-cap(68.0e-9)
   reference-designator(c4) = "c4"
-  inst c5 : c0g-cap(68.0e-9)
+  inst c5 : film-cap(68.0e-9)
   reference-designator(c5) = "c5"
   ; TODO :
-  inst c6 : c0g-cap(390.0e-9)
+  inst c6 : film-cap(390.0e-9)
   reference-designator(c6) = "c6"
-  inst c7 : c0g-cap(82.0e-9)
+  inst c7 : film-cap(82.0e-9)
   reference-designator(c7) = "c7"
-  inst c8 : c0g-cap(390.0e-12)
+  inst c8 : film-cap(390.0e-12)
   reference-designator(c8) = "c8"
-  inst c9 : x7r-cap(1.0e-6)
+  inst c9 : film-cap(1.0e-6)
   reference-designator(c9) = "c9"
-  inst c10 : x7r-cap(1.0e-6)
+  inst c10 : film-cap(1.0e-6)
   reference-designator(c10) = "c10"
-  inst c11 : c0g-cap(2.2e-9)
+  inst c11 : film-cap(2.2e-9)
   reference-designator(c11) = "c11"
-  inst c12 : c0g-cap(27.0e-9)
+  inst c12 : film-cap(27.0e-9)
   reference-designator(c12) = "c12"
-  inst c16 : x7r-cap(1.0e-6)
+  inst c16 : film-cap(1.0e-6)
   reference-designator(c16) = "c16"
 
   ; pin headers for germanium diodes (1N34A)
@@ -289,7 +284,7 @@ pcb-module sum-amp :
   ; components: 1 resistor, 1 cap
   inst r20 : resistor(392.0e3)
   reference-designator(r20) = "r20"
-  inst c13 : c0g-cap(820.0e-12)
+  inst c13 : film-cap(820.0e-12)
   reference-designator(c13) = "c13"
 
   ; nets: all in parallel
@@ -324,7 +319,7 @@ pcb-module tone :
   reference-designator(r23) = "r23"
   inst r24 : resistor(100.0e3)
   reference-designator(r24) = "r24"
-  inst c14 : c0g-cap(3.9e-9)
+  inst c14 : film-cap(3.9e-9)
   reference-designator(c14) = "c14"
   ; 10k linear taper pot
   ; note: p[1], p[3] are swapped
@@ -359,17 +354,19 @@ pcb-module power-mod :
   port power-16v2
 
   ; capacitors
-  inst c17 : x7r-cap(47.0e-6)
+  ;inst c17 : film-cap(47.0e-6)
+  inst c17 : smallish-cap(47.0e-6)
   reference-designator(c17) = "c17"
-  inst c18 : x7r-cap(47.0e-6)
+  ;inst c18 : film-cap(47.0e-6)
+  inst c18 : smallish-cap(47.0e-6)
   reference-designator(c18) = "c18"
-  inst c19 : x7r-cap(1.0e-6)
+  inst c19 : film-cap(1.0e-6)
   reference-designator(c19) = "c19"
-  inst c20 : x7r-cap(1.0e-6)
+  inst c20 : film-cap(1.0e-6)
   reference-designator(c20) = "c20"
-  inst c21 : x7r-cap(1.0e-6)
+  inst c21 : film-cap(1.0e-6)
   reference-designator(c21) = "c21"
-  inst c22 : x7r-cap(1.0e-6)
+  inst c22 : film-cap(1.0e-6)
   reference-designator(c22) = "c22"
   ; resistors
   inst r29 : resistor(27.0e3)
@@ -448,7 +445,7 @@ pcb-module output :
     bom-status = NotInBOM
 
   ; capacitors and resistors
-  inst c15 : x7r-cap(4.7e-6)
+  inst c15 : film-cap(4.7e-6)
   reference-designator(c15) = "c15"
   inst r25 : resistor(560.0)
   reference-designator(r25) = "r25"
@@ -499,8 +496,13 @@ pcb-module centaur :
   inst u2 : components/STMicroelectronics/TL072IDT/component
   reference-designator(u2) = "U2"
 
+  ; Bypass cap
+  inst bypass-cap : decoupling-cap()
+  net (bypass-cap.p[1], u1.VCC+)
+  net (bypass-cap.p[2], power.power-9v)
+
   ; net 9v op-amp
-  net (u1.VCC+, power.power-9v)
+  ;net (u1.VCC+, power.power-9v)
   net (u1.IN1+, input.opamp-pos)
   net (u1.IN1-, input.opamp-neg)
   net (u1.OUT1, input.opamp-out)
@@ -508,9 +510,17 @@ pcb-module centaur :
   net (u1.IN2-, gain.opamp-neg)
   net (u1.OUT2, gain.opamp-out)
 
+  ; Decoupling caps
+  inst decoupling-cap-pos : decoupling-cap()
+  net (decoupling-cap-pos.p[1], u2.VCC+)
+  net (decoupling-cap-pos.p[2], power.power-16v2)
+  inst decoupling-cap-neg : decoupling-cap()
+  net (decoupling-cap-neg.p[1], u2.VCC-)
+  net (decoupling-cap-neg.p[2], power.power-n8v6)
+
   ; net 16v op-amp
-  net (u2.VCC+, power.power-16v2)
-  net (u2.VCC-, power.power-n8v6)
+  ;net (u2.VCC+, power.power-16v2)
+  ;net (u2.VCC-, power.power-n8v6)
   net (u2.IN1+, sum-amp.opamp-pos)
   net (u2.IN1-, sum-amp.opamp-neg)
   net (u2.OUT1, sum-amp.opamp-out)
