@@ -15,16 +15,39 @@ public defn expand-surface-mount-symbol (go:(LandPattern) -> LandPattern, cmp:In
       assign-landpattern(lp*)
       false
 
-defn expand-pad (p:Pad) : p ; TODO
+public defn expand-smd-pad (p:Pad) -> Pad :
+  ; Assumptions : 
+  ; - the two pads are oriented vertically w.r.t each other
+  ; - pads are rectangular
+  defn expand (s:Shape) -> Shape : s ; TODO
+  match(pad-type(p):SMD) :
+    println("Expanding %_" % [pad-shape(p)])
+    ; TODO : "edge" pad?
+    pcb-pad expanded-smd-pad :
+      type = SMD
+      shape = expand(pad-shape(p))
+      for l in layers(p) :
+        ; expand soldermask layers
+        match(specifier(l):SolderMask) :
+          make-layer(specifier(l), expand(shape(l))) 
+        else : make-layer(specifier(l), shape(l))
+    expanded-smd-pad
+  else : p
+  ;val shape = pad-shape(p)
+  ;val shape* = 
+  ;  match(shape:Rectangle) :
+  ;    if horizontal? 
+  ;  else : throw(Exception("non-rectangular pad"))
     
 
 ;public defn expand-two-pin-smd (lp:LandPattern) -> LandPattern :
-pcb-landpattern expand-two-pin-smd (lp:LandPattern) :
+public pcb-landpattern expand-two-pin-smd (lp:LandPattern) :
   val ps = pads(lp)
   if length(ps) != 2 : throw(Exception("Not a two-pad package"))
-  val pad* = expand-pad(ps[0])
+  val pad* = expand-smd-pad(pad-def(ps[0]))
   ;pcb-landpattern lp2 :
   for p in pads(lp) :
+    println("  making %_ at %_" % [pad*, pose(p)])
     make-package-pad(ref(p), pad*, pose(p), side(p))
   for l in layers(lp) :
     make-layer(specifier(l), shape(l))

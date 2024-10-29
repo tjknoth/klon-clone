@@ -10,6 +10,7 @@ defpackage main :
   import jsl
   import components/misc
   import mechanical/MountingHoles
+  import debug/test-points
 
 defn c0g-cap (cap) : 
   val comp = create-capacitor(
@@ -18,21 +19,25 @@ defn c0g-cap (cap) :
     temperature-coefficient_code = "C0G"
     case = valid-smd-pkgs("0603")
   )
-  within lp = expand-surface-mount-symbol(comp) : lp ; identity fn for now
+  within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
+
 ; TODO: find replacement
-defn x7r-cap (cap) :  create-capacitor(
-  capacitance = cap
-  type = "ceramic"
-  temperature-coefficient_code = "X7R"
-  case = valid-smd-pkgs("0603")
-) 
+defn x7r-cap (cap) :  
+  val comp = create-capacitor(
+    capacitance = cap
+    type = "ceramic"
+    temperature-coefficient_code = "X7R"
+    case = valid-smd-pkgs("0603")
+    ) 
+  within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
 
 ; Ensure resistors are large
 defn resistor (resistance) :
-  create-resistor(
-    resistance = resistance
-    case = valid-smd-pkgs("0603")
-  )
+  val comp = create-resistor(
+      resistance = resistance
+      case = valid-smd-pkgs("0603")
+    )
+  within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
 
 defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
@@ -505,11 +510,14 @@ pcb-module centaur :
   net (u2.OUT2, tone.opamp-out)
 
   ; Net sub-modules
-  net (input.out, gain.in, bypass.in)
-  net (gain.out, sum-amp.in)
-  net (sum-amp.out, tone.in)
-  net (tone.out, output.gain-in)
-  net (bypass.out, output.bypass-in)
+  net input-stage (input.out, gain.in, bypass.in)
+  net gain-stage (gain.out, sum-amp.in)
+  net sum-stage (sum-amp.out, tone.in)
+  net tone-stage (tone.out, output.gain-in)
+  net bypass-stage (bypass.out, output.bypass-in)
+
+  ; Instantiate test points for all circuit stages
+  make-test-points([input-stage, gain-stage, sum-stage, tone-stage, bypass-stage])
 
   ; net gnds 
   net GND (input.gnd bypass.gnd gain.gnd power.gnd output.gnd, u1.VCC-) 

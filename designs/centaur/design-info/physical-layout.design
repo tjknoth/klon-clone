@@ -1024,6 +1024,10 @@
     {"operation":"place","place":{"placements":[{"id":"6wL2nxYUXhjgWX3cbeh645","pose":{"center":{"x":20.986019490574328,"y":41.832545240815733},"angle":90},"side":"top"}]}},
     {"operation":"via-delete","delete":{"vias":["DK5bMgNGvU1JXgQRb869Cs/BfDScCC5aALSBH5Rx5rKRt"]}},
     {"operation":"via-delete","delete":{"vias":["DK5bMgNGvU1JXgQRb869Cs/4anrBSzEaANUwsnC1kzf3F"]}},
-    {"operation":"place","place":{"placements":[{"id":"7n2caYXRk3hV9yviBB4TXH","pose":{"center":{"x":11.292742708229495,"y":-17.042195393913136},"angle":0},"side":"top"}]}}
+    {"operation":"place","place":{"placements":[{"id":"7n2caYXRk3hV9yviBB4TXH","pose":{"center":{"x":11.292742708229495,"y":-17.042195393913136},"angle":0},"side":"top"}]}},
+    {"operation":"place","place":{"placements":[{"id":"CsMGCkaYSZfTKTAzJEBpgK","pose":{"center":{"x":44.703200101852417,"y":-43.464099677085876},"angle":90},"side":"top"},{"id":"C8Viona25vWd9sLg8KsHQD","pose":{"center":{"x":44.703200101852417,"y":-44.667299898147583},"angle":0},"side":"top"},{"id":"4qnjpbcgZ1hiZRF5bU5qkd","pose":{"center":{"x":43.5,"y":-43.464099677085876},"angle":180},"side":"top"},{"id":"6WYUdWz8ysEoD3Beesk69w","pose":{"center":{"x":43.5,"y":-45.8705},"angle":180},"side":"top"},{"id":"2jGiGaQtW77pMt4uXxaCFC","pose":{"center":{"x":44.703200101852417,"y":-45.8705},"angle":0},"side":"top"}]}},
+    {"operation":"place","place":{"placements":[{"id":"6WYUdWz8ysEoD3Beesk69w","pose":{"center":{"x":22.078651685393261,"y":-38.108060192616371},"angle":180},"side":"top"}]}},
+    {"operation":"place","place":{"placements":[{"id":"4qnjpbcgZ1hiZRF5bU5qkd","pose":{"center":{"x":25.213483146067411,"y":-34.134244139365173},"angle":180},"side":"top"}]}},
+    {"operation":"place","place":{"placements":[{"id":"2jGiGaQtW77pMt4uXxaCFC","pose":{"center":{"x":30.297903151611642,"y":-34.749312199036915},"angle":0},"side":"top"},{"id":"C8Viona25vWd9sLg8KsHQD","pose":{"center":{"x":30.297903151611642,"y":-33.5461120971845},"angle":0},"side":"top"},{"id":"CsMGCkaYSZfTKTAzJEBpgK","pose":{"center":{"x":30.297903151611642,"y":-32.3429118761228},"angle":90},"side":"top"}]}}
   ]
 }

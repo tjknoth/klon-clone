@@ -5,3 +5,4 @@ version = "0.1.0"
 jsl = { path = "/Users/tristanknoth/dev/jsl" }
 mechanical = { path = "/Users/tristanknoth/dev/mechanical" }
 # debug = { git = "JITX-Inc/debug", version = "0.3.3" }
+debug = { path = "/Users/tristanknoth/dev/debug" }
