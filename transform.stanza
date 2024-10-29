@@ -16,7 +16,7 @@ public defn expand-surface-mount-symbol (go:(LandPattern) -> LandPattern, cmp:In
       false
 
 public defn expand-smd-pad (p:Pad) -> Pad :
-  ; Assumptions : 
+  ; Assumptions :
   ; - the two pads are oriented vertically w.r.t each other
   ; - pads are rectangular
   defn expand (s:Shape) -> Shape : s ; TODO
@@ -29,16 +29,16 @@ public defn expand-smd-pad (p:Pad) -> Pad :
       for l in layers(p) :
         ; expand soldermask layers
         match(specifier(l):SolderMask) :
-          make-layer(specifier(l), expand(shape(l))) 
+          make-layer(specifier(l), expand(shape(l)))
         else : make-layer(specifier(l), shape(l))
     expanded-smd-pad
   else : p
   ;val shape = pad-shape(p)
-  ;val shape* = 
+  ;val shape* =
   ;  match(shape:Rectangle) :
-  ;    if horizontal? 
+  ;    if horizontal?
   ;  else : throw(Exception("non-rectangular pad"))
-    
+
 
 ;public defn expand-two-pin-smd (lp:LandPattern) -> LandPattern :
 public pcb-landpattern expand-two-pin-smd (lp:LandPattern) :
@@ -52,4 +52,3 @@ public pcb-landpattern expand-two-pin-smd (lp:LandPattern) :
   for l in layers(lp) :
     make-layer(specifier(l), shape(l))
   ;lp2
- 

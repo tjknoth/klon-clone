@@ -12,32 +12,41 @@ defpackage main :
   import mechanical/MountingHoles
   import debug/test-points
 
-defn c0g-cap (cap) : 
-  val comp = create-capacitor(
-    capacitance = cap
-    type = "ceramic"
-    temperature-coefficient_code = "C0G"
-    case = valid-smd-pkgs("0603")
-  )
+defn expand (go:() -> Instantiable) :
+  val comp = go()
   within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
 
-; TODO: find replacement
-defn x7r-cap (cap) :  
-  val comp = create-capacitor(
-    capacitance = cap
-    type = "ceramic"
-    temperature-coefficient_code = "X7R"
-    case = valid-smd-pkgs("0603")
-    ) 
-  within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
+; wrapper for generating x7r capacitors
+defn c0g-cap (cap) :
+  within expand() :
+    create-capacitor(
+      capacitance = cap
+      type = "ceramic"
+      temperature-coefficient_code = "C0G"
+      case = valid-smd-pkgs("0603")
+    )
 
-; Ensure resistors are large
+; wrapper for generating x7r capacitors
+defn x7r-cap (cap) :
+  within expand() :
+    create-capacitor(
+      capacitance = cap
+      type = "ceramic"
+      temperature-coefficient_code = "X7R"
+      case = valid-smd-pkgs("0603")
+    )
+
+; wrapper for generating resistors
 defn resistor (resistance) :
-  val comp = create-resistor(
+  within expand() :
+    create-resistor(
       resistance = resistance
       case = valid-smd-pkgs("0603")
     )
-  within lp = expand-surface-mount-symbol(comp) : expand-two-pin-smd(lp) ; identity fn for now
+
+; small decoupling/bypass cap
+defn decoupling-cap () :
+  c0g-cap(0.1e-6)
 
 defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
@@ -65,7 +74,7 @@ defn fatten (power-pins:Tuple) :
 
 
 
-; Input stage 
+; Input stage
 pcb-module input :
   port gnd
   port power-4v5
@@ -96,10 +105,10 @@ pcb-module input :
   net (opamp-out, out)
   net (out, opamp-neg)
 
-  symbol(GND) = create-symbol(GroundSymbol()) 
+  symbol(GND) = create-symbol(GroundSymbol())
   schematic-group(self) = input
   fatten([power-4v5, power-9v])
-  
+
 
 ; Bypass mode
 pcb-module bypass-module :
@@ -120,7 +129,7 @@ pcb-module bypass-module :
   net (r3.p[1], r4.p[1])
   net (r4.p[2], out)
 
-  symbol(GND) = create-symbol(GroundSymbol()) 
+  symbol(GND) = create-symbol(GroundSymbol())
   schematic-group(self) = bypass
   fatten([])
 
@@ -131,7 +140,7 @@ pcb-module gain :
   port out
   port gnd
   port power-4v5
-  port power-9v 
+  port power-9v
   port opamp-neg
   port opamp-pos
   port opamp-out
@@ -183,6 +192,7 @@ pcb-module gain :
   reference-designator(c4) = "c4"
   inst c5 : c0g-cap(68.0e-9)
   reference-designator(c5) = "c5"
+  ; TODO :
   inst c6 : c0g-cap(390.0e-9)
   reference-designator(c6) = "c6"
   inst c7 : c0g-cap(82.0e-9)
@@ -260,7 +270,7 @@ pcb-module gain :
 
   net GND (gnd, c16.p[2], d2.p[1])
 
-  symbol(GND) = create-symbol(GroundSymbol()) 
+  symbol(GND) = create-symbol(GroundSymbol())
   schematic-group(self) = gain
   fatten([power-4v5, power-9v])
 
@@ -370,16 +380,16 @@ pcb-module power-mod :
   inst d4 : create-part(mpn = "1N4742A", manufacturer = "Tak Cheong")
   reference-designator(d4) = "d4"
   ; Normal diodes
-  inst d7 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay") 
+  inst d7 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay")
   reference-designator(d7) = "d7"
-  inst d8 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay") 
+  inst d8 : create-part(mpn = "1N4001-E3/73", manufacturer = "Vishay")
   reference-designator(d8) = "d8"
   ; DC power jack
   ; p[5] => +, p[2] batt=> 3, p[3] => gnd
   ;inst j3 : components/HOOYA/DC-013--2-0/component
   inst j3 : components/GANGYUAN/DC-470-2_1GP/component
   reference-designator(j3) = "J3"
-  ; Voltage converter 
+  ; Voltage converter
   inst u3 : create-part(mpn = "MAX1044ESA+T") ;, "manufacturer" => "Analog Devices"])
   reference-designator(u3) = "U3"
 
@@ -393,7 +403,6 @@ pcb-module power-mod :
   net (r29.p[2], r30.p[1])
   net (r29.p[2], power-4v5)
   net (r29.p[2], c18.p[1])
-
 
   ; Converter sub-circuit
   net (u3.N_C_BOOST, power-9v)
@@ -411,7 +420,7 @@ pcb-module power-mod :
 
   net GND (gnd, j3.p[2], d4.A, c17.p[1], r30.p[2], c18.p[2], c21.p[2], u3.GND, c19.p[2])
 
-  symbol(GND) = create-symbol(GroundSymbol()) 
+  symbol(GND) = create-symbol(GroundSymbol())
   schematic-group(self) = power-supply
   fatten([power-9v, power-4v5, power-16v2, power-n8v6])
 
@@ -427,7 +436,7 @@ pcb-module output :
   public inst jack : pin-header(3)
   reference-designator(jack) = "OUT"
 
-  ; sw1: p[1] => off, p[2] => on, p[3] => out 
+  ; sw1: p[1] => off, p[2] => on, p[3] => out
   inst sw1 : pin-header(3)
   reference-designator(sw1) = "SW1"
 
@@ -466,7 +475,7 @@ pcb-module output :
 
   net GND (gnd, rv-level.p[1], r28.p[2])
 
-  symbol(GND) = create-symbol(GroundSymbol()) 
+  symbol(GND) = create-symbol(GroundSymbol())
   schematic-group(self) = output
   fatten([])
 
@@ -519,9 +528,9 @@ pcb-module centaur :
   ; Instantiate test points for all circuit stages
   make-test-points([input-stage, gain-stage, sum-stage, tone-stage, bypass-stage])
 
-  ; net gnds 
-  net GND (input.gnd bypass.gnd gain.gnd power.gnd output.gnd, u1.VCC-) 
-  symbol(GND) = create-symbol(GroundSymbol()) 
+  ; net gnds
+  net GND (input.gnd bypass.gnd gain.gnd power.gnd output.gnd, u1.VCC-)
+  symbol(GND) = create-symbol(GroundSymbol())
 
   ; Net power module to all sub-modules
   net VCC9v (power.power-9v, input.power-9v, gain.power-9v)
@@ -551,7 +560,7 @@ pcb-module centaur :
   place(in-jack-msg-tip) at loc(-32.3, -13.20) on Top
   inst in-jack-msg-mid : header-label("plug")
   place(in-jack-msg-mid) at loc(-32.3, -15.85) on Top
-  ; germanium diode pins 
+  ; germanium diode pins
   inst d2A-msg : header-label("A")
   place(d2A-msg) at loc(-5.5, -9.0) on Top
   inst d2K-msg : header-label("K")
