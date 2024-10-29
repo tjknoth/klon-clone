@@ -3,7 +3,6 @@ defpackage main :
   import core
   import jitx
   import board
-  import transform
   import jitx/commands
   import jitx/emodels
   import jitx/parts/query-api
@@ -12,17 +11,19 @@ defpackage main :
   import mechanical/MountingHoles
   import debug/test-points
 
-val big-cases = to-tuple $
-  cat(["Radial"], valid-smd-pkgs("0805"))
 
-; wrapper for generating x7r capacitors
+; wrapper for generating film capacitors
 defn film-cap (cap) :
+  ; we allow large SMD packages or radial
+  val big-cases = to-tuple $
+    cat(["Radial"], valid-smd-pkgs("0805"))
   create-capacitor(
     capacitance = cap
     type = "film"
     case = big-cases
   )
 
+; We can't find film capacitors for all the components, use x7r as a substitute
 defn smallish-cap (cap) :
   create-capacitor(
     capacitance = cap
@@ -30,10 +31,10 @@ defn smallish-cap (cap) :
     ;case = "Radial" 
     ;type = "ceramic"
     temperature-coefficient_code = "X7R"
-    case = valid-smd-pkgs("0603")
+    case = valid-smd-pkgs("0805")
   )
 
-; wrapper for generating resistors
+; wrapper for generating resistors -- easily solderable packages only
 defn resistor (resistance) :
   create-resistor(
     resistance = resistance
