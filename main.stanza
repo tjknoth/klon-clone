@@ -60,8 +60,8 @@ defn setup-board () :
 defn fatten (power-pins:Tuple) :
   inside pcb-module :
     ; Apply default net class to all nets that are not connected to a power-net
-    val default-net-class = NetClass(`Default, [`min-trace => 0.40])
-    val power-net-class = NetClass(`Default, [`min-trace => 1.20])
+    val default-net-class = NetClass(`Thicc, [`min-trace => 0.40])
+    val power-net-class = NetClass(`Thiccer, [`min-trace => 1.20])
     for x in all-connected-items(self) do :
       for n in nets(x) do :
         if any?({connected?([_, n])}, power-pins) :
@@ -631,3 +631,4 @@ set-main-module(centaur)
 view-schematic()
 view-board()
 ;view-design-explorer()
+;export-cad()
