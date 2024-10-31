@@ -11,6 +11,12 @@ defpackage main :
   import mechanical/MountingHoles
   import debug/test-points
 
+; This is a placeholder instance
+; Will acquire and hand-solder later.
+defn fake (i) :
+  inside pcb-module :
+    instance-status(i) :
+      bom-status = NotInBOM
 
 ; wrapper for generating film capacitors
 defn film-cap (cap) :
@@ -49,7 +55,7 @@ defn header-label (lbl) : ocdb/artwork/board-text/text(lbl, 1.0, 0.0)
 ; Setup the board
 defn setup-board () :
   set-board(centaur-board)
-  set-rules(ocdb/manufacturers/rules/jlcpcb-rules)
+  set-rules(jlcpcb-rules)
 
 ; Expand traces:
 ; By default width is 0.40
@@ -83,6 +89,7 @@ pcb-module input :
 
   ; Components: input jack header, two resistors and a cap
   public inst jack : pin-header(3)
+  fake(jack)
   reference-designator(jack) = "IN"
   inst r1 : resistor(10.0e3)
   reference-designator(r1) = "r1"
@@ -149,8 +156,7 @@ pcb-module gain :
   ; p2 => rv-gain_a (bot)
   inst rv-gain : components/ALPSALPINE/RK16312A0BKR-footprint/component
   reference-designator(rv-gain) = "GAIN"
-  instance-status(rv-gain) :
-    bom-status = NotInBOM
+  fake(rv-gain)
 
   inst r5 : resistor(5.1e3)
   reference-designator(r5) = "r5"
@@ -209,9 +215,11 @@ pcb-module gain :
   ; pin headers for germanium diodes (1N34A)
   ; d2: p[1] => A, p[2] => K
   inst d2 : pin-header(2)
+  fake(d2)
   reference-designator(d2) = "d2"
   ; d3: p[1] => A, p[2] => K
   inst d3 : pin-header(2)
+  fake(d3)
   reference-designator(d3) = "d3"
 
 
@@ -326,8 +334,7 @@ pcb-module tone :
   ; note: p[1], p[3] are swapped
   inst rv-tone : components/ALPSALPINE/RK1631110U1Q-footprint/component(swap? = true)
   reference-designator(rv-tone) = "TONE"
-  instance-status(rv-tone) :
-    bom-status = NotInBOM
+  fake(rv-tone)
 
   ; nets
   net (in, r21.p[1])
@@ -432,18 +439,19 @@ pcb-module output :
 
   ; jack: p1 = tip, p2 = connector, p3 = shoulder
   public inst jack : pin-header(3)
+  fake(jack)
   reference-designator(jack) = "OUT"
 
   ; sw1: p[1] => off, p[2] => on, p[3] => out
   inst sw1 : pin-header(3)
+  fake(sw1)
   reference-designator(sw1) = "SW1"
 
   ; audio taper 10k pot
   ; p[1], p[3] are swapped
   inst rv-level : components/ALPSALPINE/RK1631110U1Q-footprint/component(swap? = false)
   reference-designator(rv-level) = "LEVEL"
-  instance-status(rv-level) :
-    bom-status = NotInBOM
+  fake(rv-level)
 
   ; capacitors and resistors
   inst c15 : film-cap(4.7e-6)
@@ -562,15 +570,15 @@ pcb-module centaur :
   ; Place labels and a few symmetric components
   ;
   ; Input/output jacks
-  place(input.jack) at loc(-28.8, -16.0, 180.0) on Top
-  place(output.jack) at loc(28.8, -16.0, 180.0) on Top
+  place(input.jack) at loc(-28.5, -16.0, 180.0) on Top
+  place(output.jack) at loc(28.5, -16.0, 180.0) on Top
   ; Input jack pin labels
   inst in-jack-msg-base : header-label("sleeve")
-  place(in-jack-msg-base) at loc(-31.0, -21.20) on Top
+  place(in-jack-msg-base) at loc(-31.0, -24.50) on Top
   inst in-jack-msg-tip : header-label("tip")
-  place(in-jack-msg-tip) at loc(-32.3, -13.20) on Top
+  place(in-jack-msg-tip) at loc(-32.8, -11.20) on Top
   inst in-jack-msg-mid : header-label("plug")
-  place(in-jack-msg-mid) at loc(-32.3, -15.85) on Top
+  place(in-jack-msg-mid) at loc(-32.8, -15.85) on Top
   ; germanium diode pins
   inst d2A-msg : header-label("A")
   ;place(d2A-msg) at loc(-5.5, -9.0) on Top
@@ -582,11 +590,11 @@ pcb-module centaur :
   ;place(d3K-msg) at loc(-5.5, -1.0) on Top
   ; Output jack pin labels
   inst out-jack-msg-base : header-label("sleeve")
-  place(out-jack-msg-base) at loc(31.0, -21.20) on Top
+  place(out-jack-msg-base) at loc(31.0, -24.50) on Top
   inst out-jack-msg-tip : header-label("tip")
-  place(out-jack-msg-tip) at loc(32.3, -13.20) on Top
+  place(out-jack-msg-tip) at loc(32.8, -11.20) on Top
   inst out-jack-msg-mid : header-label("plug")
-  place(out-jack-msg-mid) at loc(32.3, -15.85) on Top
+  place(out-jack-msg-mid) at loc(32.8, -15.85) on Top
   ; Potentiometer labels
   ;inst gain-msg : header-label("gain")
   ;place(gain-msg) at loc(-21.0, 21.5) on Top

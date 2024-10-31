@@ -6,15 +6,15 @@ defpackage components/ALPSALPINE/RK16312A0BKR-footprint :
   import jitx
   import jitx/commands
   import jitx/emodels
+  import components/misc
 
-
-pcb-pad circle-th-pad :
-  name = "circle-th-pad"
-  type = TH
-  shape = Circle(1.0)
-  layer(SolderMask(Top)) = Circle(1.5)
-  layer(SolderMask(Bottom)) = Circle(1.5)
-  layer(Cutout()) = Circle(0.65)
+;pcb-pad circle-th-pad :
+;  name = "circle-th-pad"
+;  type = TH
+;  shape = Circle(1.0)
+;  layer(SolderMask(Top)) = Circle(1.5)
+;  layer(SolderMask(Bottom)) = Circle(1.5)
+;  layer(Cutout()) = Circle(0.65)
 
 pcb-landpattern lp :
   pad p[1] : circle-th-pad at loc(-6.43350000000009, -5.00099999999998) on Top

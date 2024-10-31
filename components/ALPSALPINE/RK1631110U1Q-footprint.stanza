@@ -6,15 +6,16 @@ defpackage components/ALPSALPINE/RK1631110U1Q-footprint :
   import jitx
   import jitx/commands
   import jitx/emodels
+  import components/misc
 
 
-pcb-pad circle-th-pad :
-  name = "circle-th-pad"
-  type = TH
-  shape = Circle(1.0)
-  layer(SolderMask(Top)) = Circle(1.5)
-  layer(SolderMask(Bottom)) = Circle(1.5)
-  layer(Cutout()) = Circle(0.65)
+;pcb-pad circle-th-pad :
+;  name = "circle-th-pad"
+;  type = TH
+;  shape = Circle(1.0)
+;  layer(SolderMask(Top)) = Circle(1.5)
+;  layer(SolderMask(Bottom)) = Circle(1.5)
+;  layer(Cutout()) = Circle(0.65)
 
 pcb-landpattern lp (swap?:True|False):
   if swap? :
