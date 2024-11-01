@@ -7,3 +7,6 @@ designs/centaur/kicad/
 .slm
 parts-db/
 3d-models/
+.DS_Store
+designs/.DS_Store
+designs/centaur/.DS_Store

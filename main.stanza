@@ -507,6 +507,7 @@ pcb-module centaur :
 
   ; Bypass cap
   inst bypass-cap : decoupling-cap()
+  reference-designator(bypass-cap) = "bypass-cap"
   net (bypass-cap.p[1], u1.VCC+)
   net (bypass-cap.p[2], power.power-9v)
 
@@ -521,9 +522,11 @@ pcb-module centaur :
 
   ; Decoupling caps
   inst decoupling-cap-pos : decoupling-cap()
+  reference-designator(decoupling-cap-pos) = "dc-cap-pos"
   net (decoupling-cap-pos.p[1], u2.VCC+)
   net (decoupling-cap-pos.p[2], power.power-16v2)
   inst decoupling-cap-neg : decoupling-cap()
+  reference-designator(decoupling-cap-neg) = "dc-cap-neg"
   net (decoupling-cap-neg.p[1], u2.VCC-)
   net (decoupling-cap-neg.p[2], power.power-n8v6)
 
